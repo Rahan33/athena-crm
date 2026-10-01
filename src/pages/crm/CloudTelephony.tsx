@@ -274,7 +274,8 @@ export default function CloudTelephony() {
         enableRingingState: true
       });
       twilioDevice.current = device;
-      device.on('ready', async () => {
+      await device.register();
+
         let cleanNumber = dialNumber.replace(/\D/g, '');
         if (cleanNumber.length === 10) cleanNumber = '+91' + cleanNumber;
         else if (!cleanNumber.startsWith('+')) cleanNumber = '+' + cleanNumber;
@@ -289,8 +290,7 @@ export default function CloudTelephony() {
           setIsCalling(false);
           twilioCall.current = null;
         });
-      });
-      await device.register();
+      
     } catch (err) {
       console.error(err);
       alert('Failed to connect call via Twilio.');
