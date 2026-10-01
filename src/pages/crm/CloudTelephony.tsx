@@ -269,11 +269,7 @@ export default function CloudTelephony() {
     try {
       const res = await fetch('/api/telephony/token');
       const data = await res.json();
-      const device = new Device(data.token, {
-        
-        fakeLocalDTMF: true,
-        enableRingingState: true
-      });
+      const device = new Device(data.token);
       twilioDevice.current = device;
       await device.register();
 
