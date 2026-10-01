@@ -286,9 +286,7 @@ export default function CloudTelephony() {
       const data = await res.json();
       if (!data.token) throw new Error('No Twilio token received from server');
       
-      const device = new Device(data.token, {
-        codecPreferences: ['pcmu', 'opus']
-      });
+      const device = new Device(data.token);
       twilioDevice.current = device;
 
       let cleanNumber = dialNumber.replace(/\D/g, '');
