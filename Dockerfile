@@ -1,10 +1,4 @@
-# ==========================================
-# CLOUD NATIVE DOCKERFILE - FRONTEND SPA
-# Multi-Stage Production Build (Node -> Nginx Alpine)
-# ==========================================
-
-# Stage 1: Build Application
-FROM node:20-alpine AS builder
+FROM node:20-alpine
 
 WORKDIR /app
 
@@ -13,27 +7,16 @@ COPY package*.json ./
 RUN npm ci
 
 # Copy application source & config
-COPY tsconfig*.json vite.config.ts index.html ./
-COPY src ./src
-COPY public ./public
+COPY . .
 
-# Build optimized production bundle
+# Generate Prisma Client
+RUN npx prisma generate
+
+# Build optimized production bundle (Vite)
 RUN npm run build
 
-# Stage 2: Production Web Server
-FROM nginx:1.27-alpine AS runner
+# Expose the API and UI port
+EXPOSE 4000
 
-# Copy custom Nginx security and reverse proxy configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Copy compiled static assets from builder
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Expose standard HTTP port
-EXPOSE 80
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
-  CMD wget --quiet --tries=1 --spider http://127.0.0.1/healthz || exit 1
-
-CMD ["nginx", "-g", "daemon off;"]
+# Start the Express server
+CMD ["npm", "run", "start"]
