@@ -54,7 +54,7 @@ export default function JobRequisitions() {
     e.preventDefault();
     if (!editingReq) return;
     try {
-      const res = await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/requisitions/${editingReq.id}`, editFormData);
+      const res = await axios.put(`/api/recruitment/requisitions/${editingReq.id}`, editFormData);
       setRequisitions(requisitions.map(r => r.id === editingReq.id ? res.data : r));
       setShowEditModal(false);
       setEditingReq(null);
@@ -81,7 +81,7 @@ export default function JobRequisitions() {
 
   const fetchRequisitions = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/requisitions`);
+      const res = await axios.get(`/api/recruitment/requisitions`);
       setRequisitions(res.data);
     } catch (err) {
       console.error(err);
@@ -98,7 +98,7 @@ export default function JobRequisitions() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/requisitions`, formData);
+      const res = await axios.post(`/api/recruitment/requisitions`, formData);
       setRequisitions([res.data, ...requisitions]);
       setShowCreateModal(false);
       setFormData({
@@ -130,7 +130,7 @@ export default function JobRequisitions() {
 
   const handleStatusChange = async (id: string, newStatus: string) => {
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/requisitions/${id}`, { status: newStatus });
+      await axios.put(`/api/recruitment/requisitions/${id}`, { status: newStatus });
       setRequisitions(requisitions.map(r => r.id === id ? { ...r, status: newStatus } : r));
     } catch (err) {
       setRequisitions(requisitions.map(r => r.id === id ? { ...r, status: newStatus } : r));
@@ -140,7 +140,7 @@ export default function JobRequisitions() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this job requisition?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/requisitions/${id}`);
+      await axios.delete(`/api/recruitment/requisitions/${id}`);
       setRequisitions(requisitions.filter(r => r.id !== id));
     } catch (err) {
       setRequisitions(requisitions.filter(r => r.id !== id));

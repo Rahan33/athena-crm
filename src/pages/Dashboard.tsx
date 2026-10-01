@@ -165,7 +165,7 @@ export default function Dashboard() {
   const handleCreateProjectSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/erp/projects`, projectForm);
+      await axios.post(`/api/erp/projects`, projectForm);
       setShowProjectCreateModal(false);
       fetchDashboardData();
     } catch (err) {
@@ -178,7 +178,7 @@ export default function Dashboard() {
     e.preventDefault();
     if (!editingProject) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/erp/projects/${editingProject.id}`, projectForm);
+      await axios.put(`/api/erp/projects/${editingProject.id}`, projectForm);
       setShowProjectEditModal(false);
       setEditingProject(null);
       fetchDashboardData();
@@ -191,7 +191,7 @@ export default function Dashboard() {
   const handleDeleteProject = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this project?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/erp/projects/${id}`);
+      await axios.delete(`/api/erp/projects/${id}`);
       fetchDashboardData();
     } catch (err) {
       console.error(err);

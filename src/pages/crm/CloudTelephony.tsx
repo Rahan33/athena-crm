@@ -107,7 +107,7 @@ export default function CloudTelephony() {
 
   const fetchCalls = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/telephony/calls`);
+      const res = await axios.get(`/api/crm/telephony/calls`);
       setCalls(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error(err);
@@ -204,7 +204,7 @@ export default function CloudTelephony() {
     const message = `Hi, please click this link to join a secure audio call with Athena OS Support: ${webrtcLink}`;
     
     // Simulate Backend API Call Scaffold
-    axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/whatsapp/send`, {
+    axios.post(`/api/crm/whatsapp/send`, {
       to: dialNumber,
       message
     }).catch(console.error);
@@ -263,7 +263,7 @@ export default function CloudTelephony() {
       return;
     }
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/telephony/dial`, {
+      await axios.post(`/api/crm/telephony/dial`, {
         fromNumber: selectedFromNumber,
         phoneNumber: dialNumber,
         contactName: callerName || 'Customer Prospect',
@@ -301,7 +301,7 @@ export default function CloudTelephony() {
     const hasRecording = activeNumberConfig ? activeNumberConfig.recordingEnabled : false;
 
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/telephony/calls`, {
+      await axios.post(`/api/crm/telephony/calls`, {
         contactName: callerName || 'Customer Prospect',
         phoneNumber: dialNumber || '+1 (555) 123-4567',
         direction: 'Outbound',
@@ -353,7 +353,7 @@ export default function CloudTelephony() {
   const handleLogCallSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/telephony/calls`, {
+      await axios.post(`/api/crm/telephony/calls`, {
         ...callFormData,
         tags: callFormData.tags.split(',').map(t => t.trim()).filter(Boolean)
       });
@@ -369,7 +369,7 @@ export default function CloudTelephony() {
     e.preventDefault();
     if (!editingCall) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/telephony/calls/${editingCall.id}`, {
+      await axios.put(`/api/crm/telephony/calls/${editingCall.id}`, {
         ...callFormData,
         tags: callFormData.tags.split(',').map(t => t.trim()).filter(Boolean)
       });
@@ -385,7 +385,7 @@ export default function CloudTelephony() {
   const handleDeleteCall = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this telephony recording and call record?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/telephony/calls/${id}`);
+      await axios.delete(`/api/crm/telephony/calls/${id}`);
       if (selectedCallForPlayback?.id === id) {
         setSelectedCallForPlayback(null);
         setIsPlayingAudio(false);

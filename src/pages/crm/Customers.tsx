@@ -14,7 +14,7 @@ export default function Customers() {
 
   const fetchCustomers = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/customers`);
+      const res = await axios.get(`/api/crm/customers`);
       setCustomers(res.data);
     } catch (err) {
       console.error(err);
@@ -28,7 +28,7 @@ export default function Customers() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/customers`, newCust);
+      await axios.post(`/api/crm/customers`, newCust);
       setShowModal(false);
       setNewCust({ name: '', company: '', email: '', phone: '', address: '' });
       fetchCustomers();
@@ -41,7 +41,7 @@ export default function Customers() {
     e.preventDefault();
     if (!editingCust) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/customers/${editingCust.id}`, editingCust);
+      await axios.put(`/api/crm/customers/${editingCust.id}`, editingCust);
       setShowEditModal(false);
       setEditingCust(null);
       fetchCustomers();
@@ -52,7 +52,7 @@ export default function Customers() {
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/customers/${id}`);
+      await axios.delete(`/api/crm/customers/${id}`);
       setDeleteConfirmId(null);
       fetchCustomers();
     } catch (err) {

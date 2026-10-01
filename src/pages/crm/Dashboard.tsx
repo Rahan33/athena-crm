@@ -40,16 +40,16 @@ export default function CRMDashboard() {
 
   useEffect(() => {
     Promise.all([
-      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/leads`).catch(() => ({ data: [] })),
-      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/customers`).catch(() => ({ data: [] })),
-      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/sales`).catch(() => ({ data: [] })),
-      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/communications`).catch(() => ({ data: [] })),
-      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/tickets`).catch(() => ({ data: [] })),
-      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/deals`).catch(() => ({ data: [] })),
-      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/quotes`).catch(() => ({ data: [] })),
-      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/goals`).catch(() => ({ data: [] })),
-      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/campaigns`).catch(() => ({ data: [] })),
-      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/telephony/calls`).catch(() => ({ data: [] })),
+      axios.get(`/api/crm/leads`).catch(() => ({ data: [] })),
+      axios.get(`/api/crm/customers`).catch(() => ({ data: [] })),
+      axios.get(`/api/crm/sales`).catch(() => ({ data: [] })),
+      axios.get(`/api/crm/communications`).catch(() => ({ data: [] })),
+      axios.get(`/api/crm/tickets`).catch(() => ({ data: [] })),
+      axios.get(`/api/crm/deals`).catch(() => ({ data: [] })),
+      axios.get(`/api/crm/quotes`).catch(() => ({ data: [] })),
+      axios.get(`/api/crm/goals`).catch(() => ({ data: [] })),
+      axios.get(`/api/crm/campaigns`).catch(() => ({ data: [] })),
+      axios.get(`/api/crm/telephony/calls`).catch(() => ({ data: [] })),
     ]).then(([leadsRes, custRes, salesRes, commsRes, ticketsRes, dealsRes, quotesRes, goalsRes, campaignsRes, callsRes]) => {
       const leads = leadsRes.data || [];
       const statusCounts: Record<string, number> = {};

@@ -80,8 +80,8 @@ export default function FacialAttendance() {
   const fetchData = async () => {
     try {
       const [faceRes, logsRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/face/enrolled`),
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/face/logs`)
+        axios.get(`/api/hem/face/enrolled`),
+        axios.get(`/api/hem/face/logs`)
       ]);
       setEnrolled(faceRes.data || []);
       setLogs(logsRes.data || []);
@@ -148,7 +148,7 @@ export default function FacialAttendance() {
         department: 'Core Platform Engineering'
       };
 
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/face/punch`, {
+      const res = await axios.post(`/api/hem/face/punch`, {
         employeeName: candidate.employeeName,
         employeeId: candidate.employeeId,
         department: candidate.department,
@@ -169,7 +169,7 @@ export default function FacialAttendance() {
   const handleEnrollEmployee = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/face/enroll`, enrollForm);
+      await axios.post(`/api/hem/face/enroll`, enrollForm);
       setShowEnrollModal(false);
       setEnrollForm({
         employeeName: '',

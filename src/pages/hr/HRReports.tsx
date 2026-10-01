@@ -21,7 +21,7 @@ export default function HRReports() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/employees`)
+    axios.get(`/api/hr/employees`)
       .then(res => setTotalEmployees((res.data || []).length))
       .catch(console.error)
       .finally(() => setLoading(false));

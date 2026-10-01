@@ -27,7 +27,7 @@ export default function Sales() {
     e.preventDefault();
     if (!editingSale) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/sales/${editingSale.id}`, editSaleForm);
+      await axios.put(`/api/crm/sales/${editingSale.id}`, editSaleForm);
       setShowEditModal(false);
       fetchData();
     } catch (err) {
@@ -52,8 +52,8 @@ export default function Sales() {
   const fetchData = async () => {
     try {
       const [salesRes, custRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/sales`),
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/customers`)
+        axios.get(`/api/crm/sales`),
+        axios.get(`/api/crm/customers`)
       ]);
       setSales(salesRes.data);
       setCustomers(custRes.data);
@@ -72,7 +72,7 @@ export default function Sales() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/sales`, {
+      await axios.post(`/api/crm/sales`, {
         ...newSale,
         createdById: currentUser?.id
       });
@@ -86,7 +86,7 @@ export default function Sales() {
   const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this sales document?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/sales/${id}`);
+      await axios.delete(`/api/crm/sales/${id}`);
       fetchData();
     } catch (err) {
       console.error(err);

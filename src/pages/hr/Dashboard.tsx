@@ -37,7 +37,7 @@ export default function HRDashboard() {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/overview-stats`);
+      const res = await axios.get(`/api/hr/overview-stats`);
       setStats(res.data);
     } catch (err) {
       console.error('Failed to fetch HR stats:', err);
