@@ -36,9 +36,10 @@ import { TelephonyStore } from './crm.routes';
 router.post('/voice', (req, res) => {
   const VoiceResponse = twilio.twiml.VoiceResponse;
   const response = new VoiceResponse();
-  const callerId = req.body.CallerId; 
-  const to = req.body.To;
-  const callSid = req.body.CallSid;
+  const body = req.body || {};
+  const callerId = body.CallerId; 
+  const to = body.To;
+  const callSid = body.CallSid;
 
   if (callSid) {
     TelephonyStore.calls.unshift({
@@ -74,9 +75,10 @@ router.post('/voice', (req, res) => {
 
 // Webhook for when recording finishes
 router.post('/recording-status', (req, res) => {
-  const callSid = req.body.CallSid;
-  const recordingUrl = req.body.RecordingUrl;
-  const duration = req.body.RecordingDuration;
+  const body = req.body || {};
+  const callSid = body.CallSid;
+  const recordingUrl = body.RecordingUrl;
+  const duration = body.RecordingDuration;
   
   const callIndex = TelephonyStore.calls.findIndex(c => c.id === callSid);
   if (callIndex !== -1) {
