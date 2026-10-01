@@ -270,7 +270,7 @@ export default function CloudTelephony() {
       const res = await fetch('/api/telephony/token');
       const data = await res.json();
       const device = new Device(data.token, {
-        codecPreferences: ['opus', 'pcmu'],
+        
         fakeLocalDTMF: true,
         enableRingingState: true
       });
