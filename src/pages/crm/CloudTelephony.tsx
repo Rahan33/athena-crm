@@ -275,30 +275,49 @@ export default function CloudTelephony() {
     }
     setIsCalling(true);
     try {
+      // Force microphone permission request on mobile Safari before WebRTC stack initializes
+      try {
+        await navigator.mediaDevices.getUserMedia({ audio: true });
+      } catch (micErr: any) {
+        throw new Error('Microphone permission denied: ' + micErr.message);
+      }
+
       const res = await fetch('/api/telephony/token');
       const data = await res.json();
-      const device = new Device(data.token);
-      twilioDevice.current = device;
-      await device.register();
-
-        let cleanNumber = dialNumber.replace(/\D/g, '');
-        if (cleanNumber.length === 10) cleanNumber = '+91' + cleanNumber;
-        else if (!cleanNumber.startsWith('+')) cleanNumber = '+' + cleanNumber;
-        const call = await device.connect({
-          params: {
-            To: cleanNumber,
-            CallerId: selectedFromNumber
-          }
-        });
-        twilioCall.current = call;
-        call.on('disconnect', () => {
-          setIsCalling(false);
-          twilioCall.current = null;
-        });
+      if (!data.token) throw new Error('No Twilio token received from server');
       
-    } catch (err) {
+      const device = new Device(data.token, {
+        codecPreferences: ['pcmu', 'opus']
+      });
+      twilioDevice.current = device;
+
+      let cleanNumber = dialNumber.replace(/\D/g, '');
+      if (cleanNumber.length === 10) cleanNumber = '+91' + cleanNumber;
+      else if (!cleanNumber.startsWith('+')) cleanNumber = '+' + cleanNumber;
+      
+      const call = await device.connect({
+        params: {
+          To: cleanNumber,
+          CallerId: selectedFromNumber
+        }
+      });
+      twilioCall.current = call;
+      
+      call.on('accept', () => {
+        console.log('Call accepted!');
+      });
+      call.on('disconnect', () => {
+        setIsCalling(false);
+        twilioCall.current = null;
+      });
+      call.on('error', (twilioErr: any) => {
+        alert('Call Error: ' + twilioErr.message);
+        setIsCalling(false);
+      });
+      
+    } catch (err: any) {
       console.error(err);
-      alert('Failed to connect call via Twilio.');
+      alert('Failed to connect: ' + err.message);
       setIsCalling(false);
     }
   };
