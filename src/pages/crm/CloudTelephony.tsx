@@ -86,7 +86,7 @@ export default function CloudTelephony() {
   // Manage Numbers Settings State
   const [showNumbersModal, setShowNumbersModal] = useState(false);
   const [telephonyNumbers, setTelephonyNumbers] = useState([
-    { id: '1', number: '+91 8870370740', assignedTo: 'Admin (Rohan)', role: 'Sales Team', recordingEnabled: true }
+    { id: '1', number: '+1 7372508034', assignedTo: 'Admin (Rohan)', role: 'Sales Team', recordingEnabled: true }
   ]);
   const [newNumberForm, setNewNumberForm] = useState({
     countryCode: '+91',
