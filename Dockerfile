@@ -2,6 +2,9 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+# Install OpenSSL for Prisma Query Engine on Alpine
+RUN apk add --no-cache openssl
+
 # Copy dependency manifests
 COPY package*.json ./
 RUN npm ci
