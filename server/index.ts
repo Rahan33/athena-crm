@@ -12,6 +12,7 @@ import osRoutes from './os.routes';
 import erpRoutes from './erp.routes';
 import recruitmentRoutes from './recruitment.routes';
 import hrRoutes from './hr.routes';
+import telephonyRoutes from './telephony.routes';
 
 import multer from 'multer';
 import path from 'path';
@@ -189,6 +190,7 @@ app.use('/api/recruitment', recruitmentRoutes);
 
 // Mount HR Module API
 app.use('/api/hr', hrRoutes);
+app.use('/api/telephony', telephonyRoutes);
 
 import fs from 'fs';
 

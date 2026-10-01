@@ -73,6 +73,8 @@ export default function CloudTelephony() {
   const localStream = useRef<MediaStream | null>(null);
   const localAudioRef = useRef<HTMLAudioElement>(null);
   const remoteAudioRef = useRef<HTMLAudioElement>(null);
+  const twilioDevice = useRef<any>(null);
+  const twilioCall = useRef<any>(null);
 
   // Modals
   const [showLogCallModal, setShowLogCallModal] = useState(false);
@@ -262,61 +264,45 @@ export default function CloudTelephony() {
       alert('Please enter a destination phone number to dial.');
       return;
     }
+    setIsCalling(true);
     try {
-      await axios.post(`/api/crm/telephony/dial`, {
-        fromNumber: selectedFromNumber,
-        phoneNumber: dialNumber,
-        contactName: callerName || 'Customer Prospect',
-        agentName: 'Enterprise Agent'
+      const res = await fetch('/api/telephony/token');
+      const data = await res.json();
+      const device = new Device(data.token, {
+        codecPreferences: ['opus', 'pcmu'],
+        fakeLocalDTMF: true,
+        enableRingingState: true
       });
-      setIsCalling(true);
-      // Trigger the operating system's native phone dialer (via SIM card on mobile)
-      let cleanNumber = dialNumber.replace(/\D/g, '');
-      if (cleanNumber.length === 10) {
-        cleanNumber = '+91' + cleanNumber; // Format for Indian numbers
-      } else if (!cleanNumber.startsWith('+')) {
-        cleanNumber = '+' + cleanNumber;
-      }
-      
-      window.location.href = `tel:${cleanNumber}`;
+      twilioDevice.current = device;
+      device.on('ready', async () => {
+        let cleanNumber = dialNumber.replace(/\D/g, '');
+        if (cleanNumber.length === 10) cleanNumber = '+91' + cleanNumber;
+        else if (!cleanNumber.startsWith('+')) cleanNumber = '+' + cleanNumber;
+        const call = await device.connect({
+          params: {
+            To: cleanNumber,
+            CallerId: selectedFromNumber
+          }
+        });
+        twilioCall.current = call;
+        call.on('disconnect', () => {
+          setIsCalling(false);
+          twilioCall.current = null;
+        });
+      });
+      await device.register();
     } catch (err) {
       console.error(err);
-      setIsCalling(true);
-      let cleanNumber = dialNumber.replace(/\D/g, '');
-      if (cleanNumber.length === 10) {
-        cleanNumber = '+91' + cleanNumber;
-      } else if (!cleanNumber.startsWith('+')) {
-        cleanNumber = '+' + cleanNumber;
-      }
-      window.location.href = `tel:${cleanNumber}`;
+      alert('Failed to connect call via Twilio.');
+      setIsCalling(false);
     }
   };
-
+  
   const handleEndCall = async () => {
-    setIsCalling(false);
-    const recordedDuration = callDuration || 15;
-    
-    // Check if the selected from-number has call recording enabled
-    const activeNumberConfig = telephonyNumbers.find(n => n.number === selectedFromNumber);
-    const hasRecording = activeNumberConfig ? activeNumberConfig.recordingEnabled : false;
-
-    try {
-      await axios.post(`/api/crm/telephony/calls`, {
-        contactName: callerName || 'Customer Prospect',
-        phoneNumber: dialNumber || '+1 (555) 123-4567',
-        direction: 'Outbound',
-        durationSeconds: recordedDuration,
-        status: 'Completed',
-        agentName: activeNumberConfig?.assignedTo || 'Enterprise Agent',
-        sentiment: 'Positive',
-        notes: `Outbound call made from integrated number: ${selectedFromNumber}. Duration: ${recordedDuration}s.`,
-        tags: ['Outbound Dialer', 'Live Session'],
-        hasRecording: hasRecording
-      });
-      fetchCalls();
-    } catch (err) {
-      console.error(err);
+    if (twilioCall.current) {
+      twilioCall.current.disconnect();
     }
+    setIsCalling(false);
   };
 
   const handleOpenLogCall = () => {
