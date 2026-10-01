@@ -1,4 +1,4 @@
-﻿import { Router } from 'express';
+import { Router } from 'express';
 import twilio from 'twilio';
 
 const router = Router();
@@ -30,14 +30,31 @@ router.get('/token', (req, res) => {
   });
 });
 
+import { TelephonyStore } from './crm.routes';
+
 // TwiML webhook for outbound calls
 router.post('/voice', (req, res) => {
   const VoiceResponse = twilio.twiml.VoiceResponse;
   const response = new VoiceResponse();
-  
-  // The callerId must be a verified Twilio number on their account
-  // If no CallerId is provided, we default to empty (which Twilio will reject if not verified)
   const callerId = req.body.CallerId; 
+  const to = req.body.To;
+  const callSid = req.body.CallSid;
+
+  if (callSid) {
+    TelephonyStore.calls.unshift({
+      id: callSid,
+      callId: 'TEL-' + callSid.substring(0, 6),
+      contactName: 'Twilio Outbound',
+      phoneNumber: to || 'Unknown',
+      direction: 'Outbound',
+      durationSeconds: 0,
+      status: 'In Progress',
+      agentName: 'Enterprise Agent',
+      timestamp: new Date().toISOString(),
+      tags: ['Twilio'],
+      hasRecording: false
+    });
+  }
 
   const dial = response.dial({
     callerId: callerId,
@@ -45,8 +62,8 @@ router.post('/voice', (req, res) => {
     recordingStatusCallback: '/api/telephony/recording-status'
   });
   
-  if (req.body.To) {
-    dial.number(req.body.To);
+  if (to) {
+    dial.number(to);
   } else {
     response.say('Welcome to Athena CRM.');
   }
@@ -57,8 +74,18 @@ router.post('/voice', (req, res) => {
 
 // Webhook for when recording finishes
 router.post('/recording-status', (req, res) => {
-  console.log('Recording Status Webhook:', req.body);
-  // Optional: Update database record with recording URL
+  const callSid = req.body.CallSid;
+  const recordingUrl = req.body.RecordingUrl;
+  const duration = req.body.RecordingDuration;
+  
+  const callIndex = TelephonyStore.calls.findIndex(c => c.id === callSid);
+  if (callIndex !== -1) {
+    TelephonyStore.calls[callIndex].hasRecording = true;
+    TelephonyStore.calls[callIndex].recordingUrl = recordingUrl + '.mp3';
+    TelephonyStore.calls[callIndex].durationSeconds = parseInt(duration) || 0;
+    TelephonyStore.calls[callIndex].status = 'Completed';
+  }
+  
   res.sendStatus(200);
 });
 

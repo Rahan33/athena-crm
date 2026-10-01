@@ -277,7 +277,7 @@ let deals: any[] = [];
 let quotes: any[] = [];
 let goals: any[] = [];
 let campaigns: any[] = [];
-let telephonyCalls: any[] = [];
+export const TelephonyStore = { calls: [] };
 
 // ==========================================
 // 1. TICKET MANAGER (SUPPORT DESK)
@@ -910,7 +910,7 @@ router.delete('/campaigns/:id', (req, res) => {
 // ==========================================
 
 router.get('/telephony/calls', (req, res) => {
-  res.json(telephonyCalls);
+  res.json(TelephonyStore.calls);
 });
 
 router.post('/telephony/calls', (req, res) => {
@@ -954,7 +954,7 @@ router.post('/telephony/calls', (req, res) => {
       tags: Array.isArray(tags) ? tags : ['Inquiry', 'Verified']
     };
 
-    telephonyCalls.unshift(newCall);
+    TelephonyStore.calls.unshift(newCall);
     res.status(201).json(newCall);
   } catch (err) {
     res.status(500).json({ error: 'Failed to log telephony call' });
@@ -964,7 +964,7 @@ router.post('/telephony/calls', (req, res) => {
 router.put('/telephony/calls/:id', (req, res) => {
   try {
     const { id } = req.params;
-    const index = telephonyCalls.findIndex(c => c.id === id);
+    const index = TelephonyStore.calls.findIndex(c => c.id === id);
     if (index === -1) {
       return res.status(404).json({ error: 'Call record not found' });
     }
@@ -981,8 +981,8 @@ router.put('/telephony/calls/:id', (req, res) => {
       tags
     } = req.body;
 
-    telephonyCalls[index] = {
-      ...telephonyCalls[index],
+    TelephonyStore.calls[index] = {
+      ...TelephonyStore.calls[index],
       ...(contactName !== undefined ? { contactName } : {}),
       ...(phoneNumber !== undefined ? { phoneNumber } : {}),
       ...(direction !== undefined ? { direction } : {}),
@@ -994,7 +994,7 @@ router.put('/telephony/calls/:id', (req, res) => {
       ...(tags !== undefined ? { tags } : {})
     };
 
-    res.json(telephonyCalls[index]);
+    res.json(TelephonyStore.calls[index]);
   } catch (err) {
     res.status(500).json({ error: 'Failed to update telephony call' });
   }
@@ -1003,9 +1003,9 @@ router.put('/telephony/calls/:id', (req, res) => {
 router.delete('/telephony/calls/:id', (req, res) => {
   try {
     const { id } = req.params;
-    const initialLen = telephonyCalls.length;
-    telephonyCalls = telephonyCalls.filter(c => c.id !== id);
-    if (telephonyCalls.length === initialLen) {
+    const initialLen = TelephonyStore.calls.length;
+    TelephonyStore.calls = TelephonyStore.calls.filter(c => c.id !== id);
+    if (TelephonyStore.calls.length === initialLen) {
       return res.status(404).json({ error: 'Call record not found' });
     }
     res.json({ message: 'Call record deleted successfully', id });

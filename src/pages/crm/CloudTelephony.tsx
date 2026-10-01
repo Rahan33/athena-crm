@@ -74,6 +74,7 @@ export default function CloudTelephony() {
   const localStream = useRef<MediaStream | null>(null);
   const localAudioRef = useRef<HTMLAudioElement>(null);
   const remoteAudioRef = useRef<HTMLAudioElement>(null);
+  const recordingPlaybackRef = useRef<HTMLAudioElement>(null);
   const twilioDevice = useRef<any>(null);
   const twilioCall = useRef<any>(null);
 
@@ -232,9 +233,13 @@ export default function CloudTelephony() {
     };
   }, [isCalling]);
 
-  // Audio Player Progress Simulator
+  // Audio Player Progress Simulator & Actual Audio Playback
   useEffect(() => {
     if (isPlayingAudio) {
+      if (recordingPlaybackRef.current) {
+        recordingPlaybackRef.current.playbackRate = playbackSpeed;
+        recordingPlaybackRef.current.play().catch(e => console.log('Audio play error:', e));
+      }
       audioIntervalRef.current = setInterval(() => {
         setPlaybackProgress(prev => {
           if (prev >= 100) {
@@ -245,6 +250,9 @@ export default function CloudTelephony() {
         });
       }, 500);
     } else {
+      if (recordingPlaybackRef.current) {
+        recordingPlaybackRef.current.pause();
+      }
       if (audioIntervalRef.current) clearInterval(audioIntervalRef.current);
     }
     return () => {
@@ -653,8 +661,11 @@ export default function CloudTelephony() {
 
         {/* RIGHT AREA: CALL LOGS & RECORDING AUDIO PLAYER (8 cols) */}
         <div className="lg:col-span-8 space-y-6">
-          {/* AUDIO RECORDING PLAYER SECTION (Active when a call is selected or sample) */}
-          {selectedCallForPlayback && (
+        {/* AUDIO RECORDING PLAYER SECTION (Active when a call is selected or sample) */}
+        {selectedCallForPlayback && selectedCallForPlayback.recordingUrl && (
+          <audio ref={recordingPlaybackRef} src={selectedCallForPlayback.recordingUrl} onEnded={() => setIsPlayingAudio(false)} className="hidden" />
+        )}
+        {selectedCallForPlayback && (
             <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-purple-950 text-white p-5 rounded-2xl shadow-md border border-purple-500/20 space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-white/10">
                 <div className="flex items-center gap-2">
