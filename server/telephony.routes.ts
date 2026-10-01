@@ -59,7 +59,7 @@ router.post('/voice', (req, res) => {
   const dial = response.dial({
     callerId: callerId,
     record: 'record-from-answer',
-    recordingStatusCallback: '/api/telephony/recording-status'
+    recordingStatusCallback: 'https://athena-crm-s1au.onrender.com/api/telephony/recording-status'
   });
   
   if (to) {
