@@ -458,7 +458,7 @@ export default function Layout() {
                     setSearchQuery(e.target.value);
                     setShowSearchDropdown(true);
                   }}
-                  onFocus={() => setShowSearchDropdown(true)}
+                  onFocus={() => setShowSearchDropdown(true)} onKeyDown={(e) => { if (e.key === 'Enter' && searchResults.length > 0) { navigate(searchResults[0].href); setShowSearchDropdown(false); setSearchQuery(''); } }}
                 />
                 <Search className="absolute left-2.5 top-2 w-4 h-4 text-gray-400" />
               </div>
