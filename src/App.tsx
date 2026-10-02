@@ -11,6 +11,50 @@ import Mail from './pages/Mail';
 import Calendar from './pages/Calendar';
 import POS from './pages/POS';
 import Writer from './pages/Writer';
+import AIWhatsApp from './pages/AIWhatsApp';
+import eCommerce from './pages/eCommerce';
+import ONDC from './pages/ONDC';
+import Payments from './pages/Payments';
+import Sites from './pages/Sites';
+import LandingPage from './pages/LandingPage';
+import Domains from './pages/Domains';
+import Social from './pages/Social';
+import Survey from './pages/Survey';
+import PageSense from './pages/PageSense';
+import Backstage from './pages/Backstage';
+import Publish from './pages/Publish';
+import Community from './pages/Community';
+import Journeys from './pages/Journeys';
+import Thrive from './pages/Thrive';
+import DAP from './pages/DAP';
+import Lens from './pages/Lens';
+import Sheet from './pages/Sheet';
+import Show from './pages/Show';
+import Sign from './pages/Sign';
+import Notebook from './pages/Notebook';
+import PDFEditor from './pages/PDFEditor';
+import Vani from './pages/Vani';
+import Bookings from './pages/Bookings';
+import Creator from './pages/Creator';
+import Flow from './pages/Flow';
+import RPA from './pages/RPA';
+import Catalyst from './pages/Catalyst';
+import QEngine from './pages/QEngine';
+import IoT from './pages/IoT';
+import DataPrep from './pages/DataPrep';
+import Agents from './pages/Agents';
+import Vault from './pages/Vault';
+import Directory from './pages/Directory';
+import MDM from './pages/MDM';
+import Monitoring from './pages/Monitoring';
+import Patch from './pages/Patch';
+import SIEM from './pages/SIEM';
+import ServiceDesk from './pages/ServiceDesk';
+import Contracts from './pages/Contracts';
+import Classes from './pages/Classes';
+import Practice from './pages/Practice';
+import BugTracker from './pages/BugTracker';
+
 import Meetings from './pages/Meetings';
 import Files from './pages/Files';
 import Approvals from './pages/Approvals';
@@ -124,6 +168,50 @@ function App() {
           <Route path="calendar" element={<Calendar />} />
           <Route path="pos" element={<POS />} />
           <Route path="writer" element={<Writer />} />
+          <Route path="ai-whatsapp" element={<AIWhatsApp />} />
+          <Route path="ecommerce" element={<eCommerce />} />
+          <Route path="ondc" element={<ONDC />} />
+          <Route path="payments" element={<Payments />} />
+          <Route path="sites" element={<Sites />} />
+          <Route path="landingpage" element={<LandingPage />} />
+          <Route path="domains" element={<Domains />} />
+          <Route path="social" element={<Social />} />
+          <Route path="survey" element={<Survey />} />
+          <Route path="pagesense" element={<PageSense />} />
+          <Route path="backstage" element={<Backstage />} />
+          <Route path="publish" element={<Publish />} />
+          <Route path="community" element={<Community />} />
+          <Route path="journeys" element={<Journeys />} />
+          <Route path="thrive" element={<Thrive />} />
+          <Route path="dap" element={<DAP />} />
+          <Route path="lens" element={<Lens />} />
+          <Route path="sheet" element={<Sheet />} />
+          <Route path="show" element={<Show />} />
+          <Route path="sign" element={<Sign />} />
+          <Route path="notebook" element={<Notebook />} />
+          <Route path="pdfeditor" element={<PDFEditor />} />
+          <Route path="vani" element={<Vani />} />
+          <Route path="bookings" element={<Bookings />} />
+          <Route path="creator" element={<Creator />} />
+          <Route path="flow" element={<Flow />} />
+          <Route path="rpa" element={<RPA />} />
+          <Route path="catalyst" element={<Catalyst />} />
+          <Route path="qengine" element={<QEngine />} />
+          <Route path="iot" element={<IoT />} />
+          <Route path="dataprep" element={<DataPrep />} />
+          <Route path="agents" element={<Agents />} />
+          <Route path="vault" element={<Vault />} />
+          <Route path="directory" element={<Directory />} />
+          <Route path="mdm" element={<MDM />} />
+          <Route path="monitoring" element={<Monitoring />} />
+          <Route path="patch" element={<Patch />} />
+          <Route path="siem" element={<SIEM />} />
+          <Route path="servicedesk" element={<ServiceDesk />} />
+          <Route path="contracts" element={<Contracts />} />
+          <Route path="classes" element={<Classes />} />
+          <Route path="practice" element={<Practice />} />
+          <Route path="bugtracker" element={<BugTracker />} />
+          
           <Route path="meetings" element={<Meetings />} />
           <Route path="files" element={<Files />} />
           <Route path="approvals" element={<ProtectedRoute adminOnly><Approvals /></ProtectedRoute>} />

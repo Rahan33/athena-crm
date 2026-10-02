@@ -140,7 +140,15 @@ interface AccountsAlerts {
 
 export default function Finance() {
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState<'pnl' | 'balanceSheet' | 'trialBalance' | 'cashFlow' | 'vouchers' | 'ims' | 'costCentres' | 'budgets' | 'ratios' | 'dayBook' | 'exceptions' | 'gstr1' | 'gstr3b' | 'outstanding' | 'ledger' | 'manage'>('pnl');
+  const queryParams = new URLSearchParams(location.search);
+  const initialTab = (queryParams.get('tab') as any) || 'pnl';
+  const [activeTab, setActiveTab] = useState<'pnl' | 'balanceSheet' | 'trialBalance' | 'cashFlow' | 'vouchers' | 'ims' | 'costCentres' | 'budgets' | 'ratios' | 'dayBook' | 'exceptions' | 'gstr1' | 'gstr3b' | 'outstanding' | 'ledger' | 'manage'>(initialTab);
+
+  useEffect(() => {
+    const tab = new URLSearchParams(location.search).get('tab');
+    if (tab) setActiveTab(tab as any);
+  }, [location.search]);
+
   const [financialEntries, setFinancialEntries] = useState<FinancialEntriesData | null>(null);
 
   // GSTR-1 and GSTR-3B State

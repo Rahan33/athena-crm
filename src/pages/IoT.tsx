@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Settings, ArrowLeft } from 'lucide-react';
 
-export default function Directory() {
+export default function IoT() {
   return (
     <div className="h-[calc(100vh-4rem)] flex flex-col bg-gray-50 overflow-hidden">
       <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between shadow-sm z-10">
@@ -10,7 +10,7 @@ export default function Directory() {
             <Box className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-gray-900">Directory Engine</h1>
+            <h1 className="text-xl font-bold text-gray-900">IoT Engine</h1>
             <p className="text-xs text-gray-500 font-medium">Athena Business OS Native Module</p>
           </div>
         </div>
@@ -20,7 +20,7 @@ export default function Directory() {
       </div>
       <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-gray-50">
         <Box className="w-24 h-24 text-gray-300 mb-6" />
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Directory Dashboard is Active</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">IoT Dashboard is Active</h2>
         <p className="text-gray-500 max-w-md mx-auto">This module is currently running on the Athena Core architecture. Use the configuration panel to connect databases and APIs.</p>
       </div>
     </div>
