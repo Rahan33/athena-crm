@@ -309,13 +309,13 @@ export default function CloudTelephony() {
         twilioCall.current = null;
       });
       call.on('error', (twilioErr: any) => {
-        alert('Call Error: ' + twilioErr.message);
+        alert('Call Error: ' + twilioErr.message); fetch('/api/telephony/debug-error', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ error: twilioErr.message, type: 'twilio_error' }) });
         setIsCalling(false);
       });
       
     } catch (err: any) {
       console.error(err);
-      alert('Failed to connect: ' + err.message);
+      alert('Failed to connect: ' + err.message); fetch('/api/telephony/debug-error', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ error: err.message, stack: err.stack, type: 'catch' }) });
       setIsCalling(false);
     }
   };

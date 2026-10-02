@@ -91,4 +91,5 @@ router.post('/recording-status', (req, res) => {
   res.sendStatus(200);
 });
 
+router.post('/debug-error', (req, res) => { console.log('[FRONTEND ERROR]', req.body); res.sendStatus(200); });
 export default router;
