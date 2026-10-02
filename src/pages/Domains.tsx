@@ -22,7 +22,7 @@ export default function Domains() {
            <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center"><Globe className="w-6 h-6"/></div>
            <div>
              <h2 className="text-xl font-bold text-gray-900">athenastore.com</h2>
-             <p className="text-sm text-green-600 font-bold flex items-center gap-1"><ShieldCheck className="w-4 h-4"/> Auto-Renew Active • SSL Secured</p>
+             <p className="text-sm text-green-600 font-bold flex items-center gap-1"><ShieldCheck className="w-4 h-4"/> Auto-Renew Active | SSL Secured</p>
            </div>
          </div>
          <button className="px-4 py-2 bg-gray-100 text-gray-700 font-bold rounded-lg hover:bg-gray-200">Manage DNS</button>
