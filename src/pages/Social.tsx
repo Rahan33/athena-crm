@@ -1,5 +1,5 @@
 import React from 'react';
-import { Share2, ThumbsUp, MessageCircle, Twitter, Facebook, Linkedin, Plus } from 'lucide-react';
+import { Share2, ThumbsUp, MessageCircle, Hash, Globe, Plus } from 'lucide-react';
 
 export default function Social() {
   return (
@@ -27,7 +27,7 @@ export default function Social() {
         <h3 className="font-bold text-gray-900 mb-4">Upcoming Schedule</h3>
         <div className="space-y-4">
           <div className="flex items-start gap-4 p-4 border border-gray-100 bg-gray-50 rounded-xl">
-             <div className="bg-blue-600 p-2 rounded-lg text-white"><Linkedin className="w-5 h-5"/></div>
+             <div className="bg-blue-600 p-2 rounded-lg text-white"><Globe className="w-5 h-5"/></div>
              <div className="flex-1">
                <div className="flex justify-between items-start mb-2">
                  <div className="font-bold text-gray-900 text-sm">Product Launch Announcement</div>
@@ -37,7 +37,7 @@ export default function Social() {
              </div>
           </div>
           <div className="flex items-start gap-4 p-4 border border-gray-100 bg-gray-50 rounded-xl">
-             <div className="bg-sky-500 p-2 rounded-lg text-white"><Twitter className="w-5 h-5"/></div>
+             <div className="bg-sky-500 p-2 rounded-lg text-white"><Hash className="w-5 h-5"/></div>
              <div className="flex-1">
                <div className="flex justify-between items-start mb-2">
                  <div className="font-bold text-gray-900 text-sm">Thread: 5 ways to optimize workflow</div>
