@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
-  Users, LayoutDashboard, MessageSquare, Video, FolderGit2, Zap, LogOut, 
+  Search, Users, LayoutDashboard, MessageSquare, Video, FolderGit2, Zap, LogOut, 
   Briefcase, UserSquare2, Receipt, PhoneCall, Clock, DollarSign, Target, 
   UserCog, Bot, CheckSquare, LifeBuoy, Package, ShieldCheck, Laptop, Menu, X,
   FileSpreadsheet, Compass, FileCheck, Mail, GitBranch, BarChart3, Award,
@@ -19,8 +19,23 @@ function cn(...inputs: (string | undefined | null | false)[]) {
 
 export default function Layout() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isHudOpen, setIsHudOpen] = useState(false);
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setShowSearchDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Auto-close mobile sidebar when route changes
   useEffect(() => {
@@ -100,6 +115,19 @@ export default function Layout() {
   if (isAdmin) {
     navItems.push({ name: 'Central Approvals', href: '/approvals', icon: ShieldCheck });
   }
+
+  const allModules = [
+    ...navItems.map(i => ({ ...i, category: 'General' })),
+    ...crmNavItems.map(i => ({ ...i, category: 'Front Office (CRM & Sales)' })),
+    ...erpNavItems.map(i => ({ ...i, category: 'Operations (Supply Chain)' })),
+    ...financeNavItems.map(i => ({ ...i, category: 'Back Office & Finance' })),
+    ...hrNavItems.map(i => ({ ...i, category: 'People Layer (HRM)' })),
+    ...dashboardNavItems.map(i => ({ ...i, category: 'Dashboards' }))
+  ];
+
+  const searchResults = searchQuery.trim() === '' 
+    ? [] 
+    : allModules.filter(m => m.name.toLowerCase().includes(searchQuery.toLowerCase()) || m.category.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const renderNavLinks = () => (
     <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
@@ -335,6 +363,56 @@ export default function Layout() {
           </div>
 
           <div className="flex items-center space-x-2 sm:space-x-3">
+            {/* Global Search */}
+            <div className="relative hidden sm:block" ref={searchContainerRef}>
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search modules..."
+                  className="w-64 pl-9 pr-4 py-1.5 bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg text-sm transition-all shadow-inner"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setShowSearchDropdown(true);
+                  }}
+                  onFocus={() => setShowSearchDropdown(true)}
+                />
+                <Search className="absolute left-2.5 top-2 w-4 h-4 text-gray-400" />
+              </div>
+              
+              {showSearchDropdown && searchQuery && (
+                <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden">
+                  <div className="max-h-96 overflow-y-auto">
+                    {searchResults.length > 0 ? (
+                      searchResults.map((result, idx) => (
+                        <div 
+                          key={idx}
+                          onClick={() => {
+                            navigate(result.href);
+                            setShowSearchDropdown(false);
+                            setSearchQuery('');
+                          }}
+                          className="flex items-center px-4 py-3 hover:bg-blue-50 border-b border-gray-50 last:border-0 cursor-pointer transition-colors"
+                        >
+                          <div className="p-2 bg-blue-100 text-blue-600 rounded-lg mr-3">
+                            <result.icon className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold text-gray-800">{result.name}</p>
+                            <p className="text-xs text-gray-500">{result.category}</p>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="p-4 text-center text-sm text-gray-500">
+                        No modules found matching "{searchQuery}"
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
             <button
               onClick={() => setIsHudOpen(!isHudOpen)}
               className="flex items-center space-x-1.5 sm:space-x-2 px-2.5 sm:px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-blue-400 rounded-lg text-xs font-semibold shadow-sm transition-all border border-slate-700/80 cursor-pointer"
