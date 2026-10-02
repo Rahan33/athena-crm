@@ -37,8 +37,10 @@ router.post('/voice', (req, res) => {
   const VoiceResponse = twilio.twiml.VoiceResponse;
   const response = new VoiceResponse();
   const body = req.body || {};
-  const callerId = body.CallerId; 
-  const to = body.To;
+  let callerId = body.CallerId || ''; 
+  if (callerId && !callerId.startsWith('+')) callerId = '+' + callerId.trim();
+  let to = body.To || '';
+  if (to && !to.startsWith('+')) to = '+' + to.trim();
   const callSid = body.CallSid;
 
   if (callSid) {
