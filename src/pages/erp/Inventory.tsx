@@ -35,8 +35,19 @@ interface StockSummary {
   godowns: string[];
 }
 
+import { useLocation } from 'react-router-dom';
+
 export default function Inventory() {
-  const [activeTab, setActiveTab] = useState<'godownMatrix' | 'batches' | 'transfers' | 'manufacturing' | 'physicalStock' | 'stockLedger' | 'groupsUnits'>('godownMatrix');
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const initialTab = (queryParams.get('tab') as any) || 'godownMatrix';
+  const [activeTab, setActiveTab] = useState<'godownMatrix' | 'batches' | 'transfers' | 'manufacturing' | 'physicalStock' | 'stockLedger' | 'groupsUnits'>(initialTab);
+
+  useEffect(() => {
+    const tab = new URLSearchParams(location.search).get('tab');
+    if (tab) setActiveTab(tab as any);
+  }, [location.search]);
+
   const [godownItems, setGodownItems] = useState<GodownItem[]>([]);
   const [stockSummary, setStockSummary] = useState<StockSummary>({
     totalItemsCount: 0,
