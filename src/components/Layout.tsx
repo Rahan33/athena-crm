@@ -55,6 +55,8 @@ export default function Layout() {
 
   const navItems = [
     { name: 'Unified Dashboard', href: '/', icon: LayoutDashboard },
+    { name: 'Mail', href: '/mail', icon: Mail },
+    { name: 'Calendar', href: '/calendar', icon: Calendar },
     { name: 'Directory', href: '/directory', icon: Users },
     { name: 'Chat & Collaboration', href: '/chat', icon: MessageSquare },
     { name: 'Video Meetings', href: '/meetings', icon: Video },
@@ -63,6 +65,7 @@ export default function Layout() {
 
   const crmNavItems = [
     { name: 'CRM Overview', href: '/crm', icon: Briefcase },
+    { name: 'AI WhatsApp (Live)', href: '/ai-whatsapp', icon: MessageCircle },
     { name: 'Leads Pipeline', href: '/crm/leads', icon: Users },
     { name: 'Customers & Accounts', href: '/crm/customers', icon: UserSquare2 },
     { name: 'Tickets & Field Service', href: '/crm/tickets', icon: LifeBuoy },
@@ -101,6 +104,13 @@ export default function Layout() {
     { name: 'Journeys', href: '/journeys', icon: Workflow },
   ];
   
+    const commerceNavItems = [
+    { name: 'Point of Sale (POS)', href: '/pos', icon: ShoppingBag },
+    { name: 'eCommerce Admin', href: '/ecommerce', icon: ShoppingBag },
+    { name: 'ONDC Integrations', href: '/ondc', icon: Globe },
+    { name: 'Payments', href: '/payments', icon: CreditCard },
+  ];
+
   const officeNavItems = [
     { name: 'Writer', href: '/writer', icon: FileText },
     { name: 'Sheet', href: '/sheet', icon: FileSpreadsheet },
@@ -457,6 +467,29 @@ export default function Layout() {
           )}
         >
           <item.icon className={cn("mr-3 h-5 w-5", location.pathname === item.href ? "text-amber-600" : "text-gray-400")} />
+          {item.name}
+        </Link>
+      ))}
+
+
+            {/* TIER 7: RETAIL & COMMERCE */}
+      <div className="pt-4 pb-1">
+        <div className="flex items-center justify-between px-3">
+          <p className="text-xs font-bold text-teal-700 uppercase tracking-wider">Retail & Commerce</p>
+        </div>
+      </div>
+      {commerceNavItems.map((item) => (
+        <Link
+          key={item.name}
+          to={item.href}
+          className={cn(
+            "flex items-center px-3 py-2.5 rounded-md text-sm font-medium transition-colors",
+            location.pathname === item.href 
+              ? "bg-teal-50 text-teal-700 font-semibold shadow-xs" 
+              : "text-gray-700 hover:bg-gray-100"
+          )}
+        >
+          <item.icon className={cn("mr-3 h-5 w-5", location.pathname === item.href ? "text-teal-600" : "text-gray-400")} />
           {item.name}
         </Link>
       ))}
