@@ -3,6 +3,8 @@ import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Directory from './pages/Directory';
 import Login from './pages/Login';
+import ClientRegister from './pages/ClientRegister';
+import ClientPortal from './pages/ClientPortal';
 import Register from './pages/Register';
 import Chat from './pages/Chat';
 import Meetings from './pages/Meetings';
@@ -104,6 +106,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/client-register" element={<ClientRegister />} />
+        <Route path="/client-portal" element={<ClientPortal />} />
         <Route path="/register" element={<Register />} />
         <Route path="/call/:roomId" element={<ClientCall />} />
         
