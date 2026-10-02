@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Settings, ArrowLeft } from 'lucide-react';
 
-export default function eCommerce() {
+export default function ECommerce() {
   return (
     <div className="h-[calc(100vh-4rem)] flex flex-col bg-gray-50 overflow-hidden">
       <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between shadow-sm z-10">

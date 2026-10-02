@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
-import Directory from './pages/Directory';
 import Login from './pages/Login';
 import ClientRegister from './pages/ClientRegister';
 import ClientPortal from './pages/ClientPortal';
@@ -12,7 +11,7 @@ import Calendar from './pages/Calendar';
 import POS from './pages/POS';
 import Writer from './pages/Writer';
 import AIWhatsApp from './pages/AIWhatsApp';
-import eCommerce from './pages/eCommerce';
+import ECommerce from './pages/eCommerce';
 import ONDC from './pages/ONDC';
 import Payments from './pages/Payments';
 import Sites from './pages/Sites';
@@ -44,7 +43,6 @@ import IoT from './pages/IoT';
 import DataPrep from './pages/DataPrep';
 import Agents from './pages/Agents';
 import Vault from './pages/Vault';
-import Directory from './pages/Directory';
 import MDM from './pages/MDM';
 import Monitoring from './pages/Monitoring';
 import Patch from './pages/Patch';
@@ -169,7 +167,7 @@ function App() {
           <Route path="pos" element={<POS />} />
           <Route path="writer" element={<Writer />} />
           <Route path="ai-whatsapp" element={<AIWhatsApp />} />
-          <Route path="ecommerce" element={<eCommerce />} />
+          <Route path="ecommerce" element={<ECommerce />} />
           <Route path="ondc" element={<ONDC />} />
           <Route path="payments" element={<Payments />} />
           <Route path="sites" element={<Sites />} />
@@ -201,7 +199,6 @@ function App() {
           <Route path="dataprep" element={<DataPrep />} />
           <Route path="agents" element={<Agents />} />
           <Route path="vault" element={<Vault />} />
-          <Route path="directory" element={<Directory />} />
           <Route path="mdm" element={<MDM />} />
           <Route path="monitoring" element={<Monitoring />} />
           <Route path="patch" element={<Patch />} />
