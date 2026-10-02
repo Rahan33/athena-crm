@@ -3,7 +3,7 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Search, Users, LayoutDashboard, MessageSquare, Video, FolderGit2, Zap, LogOut, 
   Briefcase, UserSquare2, Receipt, PhoneCall, Clock, DollarSign, Target, 
-  UserCog, Bot, CheckSquare, LifeBuoy, Package, ShieldCheck, Laptop, Menu, X, MapPin, Cloud, Lock, BookOpen, AlertTriangle, List, Edit,
+  UserCog, Bot, CheckSquare, LifeBuoy, Package, ShieldCheck, Laptop, Menu, X, MapPin, Cloud, Lock, BookOpen, AlertTriangle, List, Edit, ShoppingBag, CreditCard, Globe, Layout as LayoutIcon, Share2, ClipboardList, SplitSquareHorizontal, Workflow, ScanFace, MonitorPlay, PenTool, Book, Code, TestTube, Cpu, Database, Key, Activity, AlertOctagon, GraduationCap, Bug, Calendar,
   FileSpreadsheet, Compass, FileCheck, Mail, GitBranch, BarChart3, Award,
   UserCheck, BellRing, FileCheck2, FolderLock, Megaphone, HeartHandshake, Scale, Building2,
   Fingerprint, CalendarCheck, CalendarDays, Timer, Camera, Smartphone,
@@ -208,9 +208,66 @@ export default function Layout() {
     { name: 'GSTR-3B Monthly Return', href: '/erp/finance?tab=gstr3b', icon: FileCheck, category: 'Finance Compliance' },
     { name: 'Client Outstanding & Overdue', href: '/erp/finance?tab=outstanding', icon: AlertTriangle, category: 'Finance Tasks' },
     { name: 'General Ledger & Transactions', href: '/erp/finance?tab=ledger', icon: List, category: 'Finance Reports' },
-    { name: 'Manage Journal Entries', href: '/erp/finance?tab=manage', icon: Edit, category: 'Finance Tasks' }
-  ];
+    { name: 'Manage Journal Entries', href: '/erp/finance?tab=manage', icon: Edit, category: 'Finance Tasks' },
+    // --- Retail & Commerce ---
+    { name: 'Point of Sale (POS)', href: '/crm/sales?tab=pos', icon: ShoppingBag, category: 'Retail & Commerce' },
+    { name: 'eCommerce Storefront', href: '/crm/sales?tab=ecommerce', icon: ShoppingBag, category: 'Retail & Commerce' },
+    { name: 'ONDC Network Integration', href: '/crm/sales?tab=ondc', icon: ShoppingBag, category: 'Retail & Commerce' },
+    { name: 'Payments & Checkout', href: '/erp/finance?tab=payments', icon: CreditCard, category: 'Retail & Commerce' },
 
+    // --- Marketing & Websites ---
+    { name: 'Website Builder (Sites)', href: '/crm/campaigns?tab=websites', icon: Globe, category: 'Marketing' },
+    { name: 'Landing Page Builder', href: '/crm/campaigns?tab=landingpages', icon: LayoutIcon, category: 'Marketing' },
+    { name: 'Domain Registration', href: '/crm/campaigns?tab=domains', icon: Globe, category: 'Marketing' },
+    { name: 'Social Media Management', href: '/crm/campaigns?tab=social', icon: Share2, category: 'Marketing' },
+    { name: 'External Surveys', href: '/crm/campaigns?tab=surveys', icon: ClipboardList, category: 'Marketing' },
+    { name: 'A/B Testing (PageSense)', href: '/crm/campaigns?tab=abtesting', icon: SplitSquareHorizontal, category: 'Marketing' },
+    { name: 'Webinars & Events (Backstage)', href: '/crm/campaigns?tab=events', icon: Video, category: 'Marketing' },
+    { name: 'Business Listings (Publish)', href: '/crm/campaigns?tab=publish', icon: MapPin, category: 'Marketing' },
+    { name: 'Community & Link-in-bio', href: '/crm/campaigns?tab=community', icon: Users, category: 'Marketing' },
+    { name: 'Journey Automation (CommandCenter)', href: '/crm/campaigns?tab=journeys', icon: Workflow, category: 'Marketing' },
+
+    // --- Customer Success & Service ---
+    { name: 'Customer Loyalty (Thrive)', href: '/crm/customers?tab=loyalty', icon: HeartHandshake, category: 'Service' },
+    { name: 'In-Product Guidance (DAP)', href: '/crm/tickets?tab=dap', icon: Compass, category: 'Service' },
+    { name: 'Remote AR Support (Lens)', href: '/crm/tickets?tab=ar', icon: ScanFace, category: 'Service' },
+    
+    // --- Office & Productivity ---
+    { name: 'Secure Email Hosting (Mail)', href: '/chat?tab=email', icon: Mail, category: 'Workspace' },
+    { name: 'Word Processor (Writer)', href: '/files?tab=word', icon: FileText, category: 'Workspace' },
+    { name: 'Spreadsheets (Sheet)', href: '/files?tab=sheets', icon: FileSpreadsheet, category: 'Workspace' },
+    { name: 'Presentations (Show)', href: '/files?tab=slides', icon: MonitorPlay, category: 'Workspace' },
+    { name: 'Digital Signatures (Sign)', href: '/files?tab=signatures', icon: PenTool, category: 'Workspace' },
+    { name: 'Note-taking (Notebook)', href: '/files?tab=notes', icon: Book, category: 'Workspace' },
+    { name: 'Online PDF Editor', href: '/files?tab=pdf', icon: FileText, category: 'Workspace' },
+    { name: 'Visual Whiteboard (Vani)', href: '/meetings?tab=whiteboard', icon: PenTool, category: 'Workspace' },
+    { name: 'Public Booking Links', href: '/meetings?tab=bookings', icon: Calendar, category: 'Workspace' },
+
+    // --- Developer & IT Management ---
+    { name: 'Low-Code App Builder (Creator)', href: '/os?tab=apps', icon: Code, category: 'Developers' },
+    { name: 'API Integrations (Flow)', href: '/os?tab=integrations', icon: Workflow, category: 'Developers' },
+    { name: 'Robotic Process Automation (RPA)', href: '/os?tab=rpa', icon: Bot, category: 'Developers' },
+    { name: 'Cloud Hosting (Catalyst)', href: '/os?tab=cloud', icon: Cloud, category: 'Developers' },
+    { name: 'Test Automation (QEngine)', href: '/os?tab=testing', icon: TestTube, category: 'Developers' },
+    { name: 'IoT Devices Platform', href: '/os?tab=iot', icon: Cpu, category: 'Developers' },
+    { name: 'DataPrep (ETL)', href: '/os?tab=etl', icon: Database, category: 'Developers' },
+    { name: 'AI Agents & MCP', href: '/os/ai', icon: Bot, category: 'Developers' },
+
+    // --- IT Infrastructure & Security ---
+    { name: 'Password Manager (Vault)', href: '/os?tab=passwords', icon: Key, category: 'IT Security' },
+    { name: 'Identity & SSO (Directory)', href: '/os?tab=sso', icon: Fingerprint, category: 'IT Security' },
+    { name: 'Device Management (MDM)', href: '/erp/assets?tab=mdm', icon: Smartphone, category: 'IT Security' },
+    { name: 'Server Monitoring (Site24x7)', href: '/os?tab=monitoring', icon: Activity, category: 'IT Security' },
+    { name: 'Patch Management', href: '/erp/assets?tab=patching', icon: ShieldCheck, category: 'IT Security' },
+    { name: 'Threat Detection (SIEM)', href: '/os?tab=siem', icon: AlertOctagon, category: 'IT Security' },
+    { name: 'Helpdesk Ticketing (ServiceDesk)', href: '/crm/tickets?tab=it', icon: LifeBuoy, category: 'IT Security' },
+
+    // --- Legal & Specialized ---
+    { name: 'Contract Lifecycle Management', href: '/hr/documents?tab=contracts', icon: Scale, category: 'Legal' },
+    { name: 'Academic LMS (Classes)', href: '/hr?tab=lms', icon: GraduationCap, category: 'Education' },
+    { name: 'Practice Management (Accounting)', href: '/erp/finance?tab=practice', icon: Briefcase, category: 'Finance' },
+    { name: 'Bug & Sprint Tracking', href: '/erp/projects?tab=sprints', icon: Bug, category: 'Project Management' }
+  ];
   const combinedSearchIndex = [...allModules, ...deepFeatures];
 
   const searchResults = searchQuery.trim() === '' 
