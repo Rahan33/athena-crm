@@ -364,12 +364,12 @@ export default function Layout() {
 
           <div className="flex items-center space-x-2 sm:space-x-3">
             {/* Global Search */}
-            <div className="relative hidden sm:block" ref={searchContainerRef}>
+            <div className="relative" ref={searchContainerRef}>
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="Search modules..."
-                  className="w-64 pl-9 pr-4 py-1.5 bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg text-sm transition-all shadow-inner"
+                  placeholder="Search..."
+                  className="w-32 sm:w-64 pl-8 sm:pl-9 pr-2 sm:pr-4 py-1.5 bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg text-xs sm:text-sm transition-all shadow-inner"
                   value={searchQuery}
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
