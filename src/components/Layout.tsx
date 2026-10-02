@@ -88,6 +88,30 @@ export default function Layout() {
     { name: 'Payroll & Statutory Hub', href: '/hem/payroll', icon: Receipt },
   ];
 
+    const marketingNavItems = [
+    { name: 'Sites (Website Builder)', href: '/sites', icon: Globe },
+    { name: 'LandingPage', href: '/landingpage', icon: LayoutIcon },
+    { name: 'Domains (DNS)', href: '/domains', icon: ShieldCheck },
+    { name: 'Social', href: '/social', icon: Share2 },
+    { name: 'Survey', href: '/survey', icon: ClipboardList },
+    { name: 'PageSense', href: '/pagesense', icon: SplitSquareHorizontal },
+    { name: 'Backstage', href: '/backstage', icon: CalendarDays },
+    { name: 'Publish', href: '/publish', icon: MapPin },
+    { name: 'Community', href: '/community', icon: Users },
+    { name: 'Journeys', href: '/journeys', icon: Workflow },
+  ];
+  
+  const officeNavItems = [
+    { name: 'Writer', href: '/writer', icon: FileText },
+    { name: 'Sheet', href: '/sheet', icon: FileSpreadsheet },
+    { name: 'Show', href: '/show', icon: MonitorPlay },
+    { name: 'Sign', href: '/sign', icon: PenTool },
+    { name: 'Notebook', href: '/notebook', icon: Book },
+    { name: 'PDFEditor', href: '/pdfeditor', icon: FileCheck },
+    { name: 'Vani', href: '/vani', icon: Edit },
+    { name: 'Bookings', href: '/bookings', icon: Calendar },
+  ];
+
   const hrNavItems = [
     { name: 'HR Overview', href: '/hr', icon: LayoutDashboard },
     { name: 'Employee Info', href: '/hr/employee-info', icon: Users },
@@ -392,6 +416,51 @@ export default function Layout() {
           {item.name}
         </Link>
       ))}
+
+            {/* TIER 5: MARKETING & WEB */}
+      <div className="pt-4 pb-1">
+        <div className="flex items-center justify-between px-3">
+          <p className="text-xs font-bold text-rose-700 uppercase tracking-wider">Marketing & Web Presence</p>
+        </div>
+      </div>
+      {marketingNavItems.map((item) => (
+        <Link
+          key={item.name}
+          to={item.href}
+          className={cn(
+            "flex items-center px-3 py-2.5 rounded-md text-sm font-medium transition-colors",
+            location.pathname === item.href 
+              ? "bg-rose-50 text-rose-700 font-semibold shadow-xs" 
+              : "text-gray-700 hover:bg-gray-100"
+          )}
+        >
+          <item.icon className={cn("mr-3 h-5 w-5", location.pathname === item.href ? "text-rose-600" : "text-gray-400")} />
+          {item.name}
+        </Link>
+      ))}
+
+      {/* TIER 6: OFFICE & PRODUCTIVITY */}
+      <div className="pt-4 pb-1">
+        <div className="flex items-center justify-between px-3">
+          <p className="text-xs font-bold text-amber-700 uppercase tracking-wider">Office & Productivity</p>
+        </div>
+      </div>
+      {officeNavItems.map((item) => (
+        <Link
+          key={item.name}
+          to={item.href}
+          className={cn(
+            "flex items-center px-3 py-2.5 rounded-md text-sm font-medium transition-colors",
+            location.pathname === item.href 
+              ? "bg-amber-50 text-amber-700 font-semibold shadow-xs" 
+              : "text-gray-700 hover:bg-gray-100"
+          )}
+        >
+          <item.icon className={cn("mr-3 h-5 w-5", location.pathname === item.href ? "text-amber-600" : "text-gray-400")} />
+          {item.name}
+        </Link>
+      ))}
+
 
       {/* ROLE PORTALS */}
       <div className="pt-4 pb-1">
