@@ -16,7 +16,7 @@ export default function Sheet() {
     { id: 8, name: 'Legal Retainer', category: 'Legal', status: 'Pending', amount: 15000, date: '2026-02-28' },
   ]);
 
-  const [columnDefs] = useState([
+  const [columnDefs] = useState<any[]>([ 
     { field: 'id', headerName: 'ID', width: 80, editable: true },
     { field: 'name', headerName: 'Expense Item', flex: 1, editable: true },
     { field: 'category', headerName: 'Department', width: 150, editable: true },
