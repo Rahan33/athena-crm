@@ -1,27 +1,84 @@
-import React from 'react';
-import { Box, Settings, ArrowLeft } from 'lucide-react';
+import React, { useRef, useState, useEffect } from 'react';
+import { PenTool, MousePointer2, Square, Circle, Type, Download, Trash2 } from 'lucide-react';
 
 export default function Vani() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [color, setColor] = useState('#3b82f6');
+  
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+       canvas.width = canvas.offsetWidth;
+       canvas.height = canvas.offsetHeight;
+       const ctx = canvas.getContext('2d');
+       if (ctx) {
+         ctx.lineCap = 'round';
+         ctx.lineJoin = 'round';
+         ctx.lineWidth = 4;
+       }
+    }
+  }, []);
+
+  const startDrawing = (e: React.MouseEvent) => {
+    const ctx = canvasRef.current?.getContext('2d');
+    if (ctx && canvasRef.current) {
+      ctx.beginPath();
+      ctx.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+      setIsDrawing(true);
+    }
+  };
+
+  const draw = (e: React.MouseEvent) => {
+    if (!isDrawing) return;
+    const ctx = canvasRef.current?.getContext('2d');
+    if (ctx) {
+      ctx.strokeStyle = color;
+      ctx.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+      ctx.stroke();
+    }
+  };
+
+  const stopDrawing = () => {
+    const ctx = canvasRef.current?.getContext('2d');
+    if (ctx) { ctx.closePath(); }
+    setIsDrawing(false);
+  };
+
+  const clearCanvas = () => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext('2d');
+    if (ctx && canvas) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  };
+
   return (
-    <div className="h-[calc(100vh-4rem)] flex flex-col bg-gray-50 overflow-hidden">
-      <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between shadow-sm z-10">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600">
-            <Box className="w-6 h-6" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">Vani Engine</h1>
-            <p className="text-xs text-gray-500 font-medium">Athena Business OS Native Module</p>
-          </div>
-        </div>
-        <button className="px-4 py-2 bg-gray-100 text-gray-700 font-bold rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2 text-sm">
-          <Settings className="w-4 h-4" /> Configure
-        </button>
+    <div className="h-[calc(100vh-4rem)] flex flex-col bg-gray-100 overflow-hidden relative">
+      {/* Floating Toolbar */}
+      <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-white px-4 py-2 rounded-xl shadow-lg border border-gray-200 flex gap-2 z-10 items-center">
+        <button className="p-2 bg-blue-50 text-blue-600 rounded-lg"><PenTool className="w-5 h-5"/></button>
+        <button className="p-2 hover:bg-gray-100 text-gray-600 rounded-lg"><MousePointer2 className="w-5 h-5"/></button>
+        <div className="w-px h-6 bg-gray-200 mx-2"></div>
+        <button className="p-2 hover:bg-gray-100 text-gray-600 rounded-lg"><Square className="w-5 h-5"/></button>
+        <button className="p-2 hover:bg-gray-100 text-gray-600 rounded-lg"><Circle className="w-5 h-5"/></button>
+        <button className="p-2 hover:bg-gray-100 text-gray-600 rounded-lg"><Type className="w-5 h-5"/></button>
+        <div className="w-px h-6 bg-gray-200 mx-2"></div>
+        <input type="color" value={color} onChange={(e) => setColor(e.target.value)} className="w-8 h-8 rounded cursor-pointer border-0 p-0" />
+        <div className="w-px h-6 bg-gray-200 mx-2"></div>
+        <button onClick={clearCanvas} className="p-2 hover:bg-red-50 text-red-600 rounded-lg" title="Clear Canvas"><Trash2 className="w-5 h-5"/></button>
       </div>
-      <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-gray-50">
-        <Box className="w-24 h-24 text-gray-300 mb-6" />
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Vani Dashboard is Active</h2>
-        <p className="text-gray-500 max-w-md mx-auto">This module is currently running on the Athena Core architecture. Use the configuration panel to connect databases and APIs.</p>
+      
+      {/* Drawing Canvas */}
+      <div className="flex-1 w-full h-full cursor-crosshair">
+        <canvas 
+          ref={canvasRef}
+          onMouseDown={startDrawing}
+          onMouseMove={draw}
+          onMouseUp={stopDrawing}
+          onMouseOut={stopDrawing}
+          className="w-full h-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px]"
+        />
       </div>
     </div>
   );
