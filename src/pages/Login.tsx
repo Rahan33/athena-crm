@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Building2, ShieldCheck, Mail } from 'lucide-react';
+import { Building2, ShieldCheck, Mail, Users } from 'lucide-react';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -13,6 +13,8 @@ export default function Login() {
   
   // Client State
   const [email, setEmail] = useState('');
+  const [isSubUser, setIsSubUser] = useState(false);
+  const [subUsername, setSubUsername] = useState('');
   const [clientPassword, setClientPassword] = useState('');
   const [otp, setOtp] = useState('');
   
@@ -43,10 +45,14 @@ export default function Login() {
     e.preventDefault();
     setError(''); setMsg('');
     try {
+      const payload = isSubUser 
+        ? { email, subUsername, password: clientPassword } 
+        : { email, password: clientPassword };
+
       const res = await fetch('/api/auth/company-login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password: clientPassword })
+        body: JSON.stringify(payload)
       });
       const data = await res.json();
       if (!res.ok) { setError(data.error || 'Login failed'); return; }
@@ -81,7 +87,6 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
-        {/* Header Tabs */}
         <div className="flex border-b border-gray-200">
           <button 
             onClick={() => { setTab('employee'); setStep('login'); setError(''); }}
@@ -105,7 +110,7 @@ export default function Login() {
               {tab === 'employee' ? 'Athena Workspace' : 'Client Access Portal'}
             </h1>
             <p className="text-gray-500 mt-2 text-sm">
-              {tab === 'employee' ? 'Sign in to your internal employee dashboard' : 'Secure OTP login for registered companies'}
+              {tab === 'employee' ? 'Sign in to your internal employee dashboard' : 'Secure OTP login for registered companies & staff'}
             </p>
           </div>
           
@@ -128,14 +133,29 @@ export default function Login() {
             </form>
           ) : step === 'login' ? (
             <form onSubmit={handleClientLogin} className="space-y-5">
+              
+              <div className="flex bg-gray-100 p-1 rounded-lg mb-4">
+                <button type="button" onClick={() => setIsSubUser(false)} className={`flex-1 py-2 text-sm font-bold rounded-md transition-all ${!isSubUser ? 'bg-white shadow-sm text-purple-700' : 'text-gray-500'}`}>Company Admin</button>
+                <button type="button" onClick={() => setIsSubUser(true)} className={`flex-1 py-2 text-sm font-bold rounded-md transition-all ${isSubUser ? 'bg-white shadow-sm text-purple-700' : 'text-gray-500'}`}>Staff Member</button>
+              </div>
+
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1">Company Email</label>
                 <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white transition-all" placeholder="billing@company.com" />
               </div>
+              
+              {isSubUser && (
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-1">Sub-Username</label>
+                  <input type="text" required value={subUsername} onChange={(e) => setSubUsername(e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white transition-all" placeholder="john.doe" />
+                </div>
+              )}
+
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1">Password</label>
                 <input type="password" required value={clientPassword} onChange={(e) => setClientPassword(e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white transition-all" placeholder="••••••••" />
               </div>
+              
               <button type="submit" className="w-full py-3.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl shadow-md transition-all">
                 Send OTP to Email
               </button>
@@ -145,6 +165,7 @@ export default function Login() {
               <div className="text-center p-4 bg-purple-50 rounded-xl border border-purple-100 mb-4">
                 <Mail className="w-8 h-8 text-purple-500 mx-auto mb-2" />
                 <p className="text-sm text-purple-800 font-medium">We sent a 6-digit code to <b>{email}</b></p>
+                {isSubUser && <p className="text-xs text-purple-600 mt-1">Please ask your Company Admin to forward the OTP.</p>}
               </div>
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1 text-center">Enter Secure OTP</label>
@@ -159,7 +180,7 @@ export default function Login() {
             </form>
           )}
 
-          {tab === 'client' && step === 'login' && (
+          {tab === 'client' && step === 'login' && !isSubUser && (
             <div className="mt-6 text-center text-sm text-gray-600">
               New client?{' '}
               <Link to="/client-register" className="text-purple-600 font-bold hover:underline">
