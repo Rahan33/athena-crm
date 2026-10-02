@@ -80,7 +80,7 @@ export default function Login() {
             </div>
 
             <h1 className="text-4xl font-semibold tracking-tight text-gray-900 mb-2">Welcome <span className="text-purple-400">back.</span></h1>
-            <p className="text-gray-500 text-sm mb-8">This app check your automatics with one.</p>
+            <p className="text-gray-500 text-sm mb-8">Sign in to your Athena Business OS workspace.</p>
 
             {/* Dummy SSO Buttons */}
             <div className="space-y-3 mb-8">
@@ -160,39 +160,39 @@ export default function Login() {
           
           <div className="relative z-10 max-w-xl text-center flex flex-col items-center">
             <h2 className="text-5xl xl:text-6xl font-bold text-white tracking-tight mb-1 leading-tight">
-              We answer <br/>at <span className="text-purple-500">3am.</span><br/>You sleep.
+              Your entire <br/>business. <span className="text-purple-500">Unified.</span>
             </h2>
             
             {/* Mock Chat UI */}
             <div className="mt-12 w-full max-w-sm bg-[#111114] border border-white/5 rounded-2xl p-4 shadow-2xl backdrop-blur-sm">
               <div className="flex items-center gap-3 mb-6 border-b border-white/5 pb-4">
-                <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
                   <Check className="w-4 h-4 text-white" />
                 </div>
                 <div className="text-left">
-                  <p className="text-sm font-semibold text-white">Athena Bot • AI</p>
-                  <p className="text-xs text-emerald-500">Online</p>
+                  <p className="text-sm font-semibold text-white">Athena ERP Assistant</p>
+                  <p className="text-xs text-purple-400">Online</p>
                 </div>
               </div>
               <div className="space-y-4">
                 <div className="flex justify-end">
-                  <div className="bg-emerald-500 text-white text-sm px-4 py-2 rounded-2xl rounded-tr-sm inline-block">
-                    Hi! Do you handle tech support at night?
+                  <div className="bg-purple-600 text-white text-sm px-4 py-2 rounded-2xl rounded-tr-sm inline-block">
+                    Can you generate the Q3 sales report?
                   </div>
                 </div>
                 <div className="flex justify-start">
                   <div className="bg-[#1c1c21] text-gray-300 text-sm px-4 py-2 rounded-2xl rounded-tl-sm inline-block max-w-[85%] border border-white/5">
-                    Yes! I handle L1 and L2 triage 24/7. Let me pull up the ticket.
+                    Absolutely. Q3 revenue is up 15%. I've attached the full breakdown to your dashboard.
                   </div>
                 </div>
                 <div className="flex justify-start">
                   <div className="bg-[#1c1c21] text-gray-300 text-sm px-4 py-2 rounded-2xl rounded-tl-sm inline-block max-w-[85%] border border-white/5">
-                    12:02AM - Ticket resolved automatically. We fixed the access for the user.
+                    10:45AM - Financial ledgers synced successfully.
                   </div>
                 </div>
                 <div className="flex justify-end">
-                  <div className="bg-emerald-500 text-white text-sm px-4 py-2 rounded-2xl rounded-tr-sm inline-block">
-                    Ok, please close the ticket then!
+                  <div className="bg-purple-600 text-white text-sm px-4 py-2 rounded-2xl rounded-tr-sm inline-block">
+                    Great, notify the finance team.
                   </div>
                 </div>
               </div>
@@ -200,10 +200,10 @@ export default function Login() {
           </div>
 
           <div className="absolute bottom-12 w-full px-12 max-w-3xl flex justify-between text-white/40 text-sm font-medium">
-            <div><p className="text-white font-bold text-xl mb-1">1M+</p><p>Sessions</p></div>
-            <div><p className="text-white font-bold text-xl mb-1">120K+</p><p>Tickets Resolved</p></div>
-            <div><p className="text-white font-bold text-xl mb-1">98%</p><p>CSAT Score</p></div>
-            <div><p className="text-white font-bold text-xl mb-1">24/7</p><p>AI Coverage</p></div>
+            <div><p className="text-white font-bold text-xl mb-1">10K+</p><p>Active Users</p></div>
+            <div><p className="text-white font-bold text-xl mb-1">50+</p><p>ERP Modules</p></div>
+            <div><p className="text-white font-bold text-xl mb-1">99.9%</p><p>Uptime</p></div>
+            <div><p className="text-white font-bold text-xl mb-1">24/7</p><p>Support</p></div>
           </div>
         </div>
       </div>
@@ -229,8 +229,8 @@ export default function Login() {
           <div className="w-10 h-10 bg-purple-600 rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-purple-600/20">
             <LayoutGrid className="w-5 h-5 text-white" />
           </div>
-          <h2 className="text-xl font-bold text-white tracking-tight mb-1">Athena Teambox</h2>
-          <p className="text-sm text-gray-400 font-medium">Sign in to your team inbox</p>
+          <h2 className="text-xl font-bold text-white tracking-tight mb-1">Athena Staff Portal</h2>
+          <p className="text-sm text-gray-400 font-medium">Sign in to your restricted workspace</p>
         </div>
 
         {error && <div className="text-red-400 text-sm mb-4 font-medium text-center">{error}</div>}
