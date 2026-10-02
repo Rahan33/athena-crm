@@ -3,7 +3,7 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Search, Users, LayoutDashboard, MessageSquare, Video, FolderGit2, Zap, LogOut, 
   Briefcase, UserSquare2, Receipt, PhoneCall, Clock, DollarSign, Target, 
-  UserCog, Bot, CheckSquare, LifeBuoy, Package, ShieldCheck, Laptop, Menu, X, MapPin, Cloud,
+  UserCog, Bot, CheckSquare, LifeBuoy, Package, ShieldCheck, Laptop, Menu, X, MapPin, Cloud, Lock,
   FileSpreadsheet, Compass, FileCheck, Mail, GitBranch, BarChart3, Award,
   UserCheck, BellRing, FileCheck2, FolderLock, Megaphone, HeartHandshake, Scale, Building2,
   Fingerprint, CalendarCheck, CalendarDays, Timer, Camera, Smartphone,
