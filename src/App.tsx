@@ -7,6 +7,8 @@ import ClientRegister from './pages/ClientRegister';
 import ClientPortal from './pages/ClientPortal';
 import Register from './pages/Register';
 import Chat from './pages/Chat';
+import Mail from './pages/Mail';
+import Calendar from './pages/Calendar';
 import Meetings from './pages/Meetings';
 import Files from './pages/Files';
 import Approvals from './pages/Approvals';
@@ -116,6 +118,8 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="directory" element={<Directory />} />
           <Route path="chat" element={<Chat />} />
+          <Route path="mail" element={<Mail />} />
+          <Route path="calendar" element={<Calendar />} />
           <Route path="meetings" element={<Meetings />} />
           <Route path="files" element={<Files />} />
           <Route path="approvals" element={<ProtectedRoute adminOnly><Approvals /></ProtectedRoute>} />

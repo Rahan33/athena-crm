@@ -233,7 +233,7 @@ export default function Layout() {
     { name: 'Remote AR Support (Lens)', href: '/crm/tickets?tab=ar', icon: ScanFace, category: 'Service' },
     
     // --- Office & Productivity ---
-    { name: 'Secure Email Hosting (Mail)', href: '/chat?tab=email', icon: Mail, category: 'Workspace' },
+    { name: 'Secure Email Hosting (Mail)', href: '/mail', icon: Mail, category: 'Workspace' },
     { name: 'Word Processor (Writer)', href: '/files?tab=word', icon: FileText, category: 'Workspace' },
     { name: 'Spreadsheets (Sheet)', href: '/files?tab=sheets', icon: FileSpreadsheet, category: 'Workspace' },
     { name: 'Presentations (Show)', href: '/files?tab=slides', icon: MonitorPlay, category: 'Workspace' },
@@ -241,7 +241,7 @@ export default function Layout() {
     { name: 'Note-taking (Notebook)', href: '/files?tab=notes', icon: Book, category: 'Workspace' },
     { name: 'Online PDF Editor', href: '/files?tab=pdf', icon: FileText, category: 'Workspace' },
     { name: 'Visual Whiteboard (Vani)', href: '/meetings?tab=whiteboard', icon: PenTool, category: 'Workspace' },
-    { name: 'Public Booking Links', href: '/meetings?tab=bookings', icon: Calendar, category: 'Workspace' },
+    { name: 'Public Booking Links', href: '/calendar', icon: Calendar, category: 'Workspace' },
 
     // --- Developer & IT Management ---
     { name: 'Low-Code App Builder (Creator)', href: '/os?tab=apps', icon: Code, category: 'Developers' },
