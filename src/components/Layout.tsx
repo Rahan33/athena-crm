@@ -125,9 +125,41 @@ export default function Layout() {
     ...dashboardNavItems.map(i => ({ ...i, category: 'Dashboards' }))
   ];
 
+  const deepFeatures = [
+    { name: 'Storage Rules & Bin Locations', href: '/erp/inventory', icon: Package, category: 'Inventory Tasks' },
+    { name: 'Stock Adjustments', href: '/erp/inventory', icon: Package, category: 'Inventory Tasks' },
+    { name: 'Bill of Materials (BOM)', href: '/erp/inventory', icon: GitBranch, category: 'Inventory Tasks' },
+    { name: 'Purchase Orders (PO)', href: '/erp/purchases', icon: ShoppingCart, category: 'Procurement' },
+    { name: 'Goods Receipt Note (GRN)', href: '/erp/purchases', icon: FileCheck, category: 'Procurement' },
+    { name: 'Vendor Bills & Payments', href: '/erp/purchases', icon: Receipt, category: 'Procurement' },
+    { name: 'Journal Entries', href: '/erp/finance', icon: DollarSign, category: 'Finance Tasks' },
+    { name: 'Chart of Accounts', href: '/erp/finance', icon: DollarSign, category: 'Finance Tasks' },
+    { name: 'Trial Balance & P&L', href: '/erp/finance', icon: BarChart3, category: 'Finance Tasks' },
+    { name: 'Ind-AS Schedule III', href: '/erp/finance', icon: FileSpreadsheet, category: 'Finance Tasks' },
+    { name: 'WhatsApp Bills & Links', href: '/erp/invoicing', icon: PhoneCall, category: 'Invoicing' },
+    { name: 'Proforma Invoices', href: '/erp/invoicing', icon: FileText, category: 'Invoicing' },
+    { name: 'Employee Leave Requests', href: '/hem/leave', icon: CalendarCheck, category: 'HR Tasks' },
+    { name: 'Leave Approvals', href: '/approvals', icon: CheckSquare, category: 'HR Tasks' },
+    { name: 'Facial AI Registration', href: '/hem/facial-attendance', icon: Camera, category: 'HR Tasks' },
+    { name: 'Performance KPIs & Reviews', href: '/hem/performance', icon: Target, category: 'HR Tasks' },
+    { name: 'PF & ESI Reports', href: '/hr/labour-law-reports', icon: Scale, category: 'HR Compliance' },
+    { name: 'Field Service Routing', href: '/crm/tickets', icon: Compass, category: 'Service' },
+    { name: 'Customer Support Tickets', href: '/crm/tickets', icon: LifeBuoy, category: 'Service' },
+    { name: 'Quotations & Proposals', href: '/crm/deals', icon: BadgeDollarSign, category: 'Sales Tasks' },
+    { name: 'Deal Kanban Pipeline', href: '/crm/deals', icon: LayoutDashboard, category: 'Sales Tasks' },
+    { name: 'Email Campaigns', href: '/crm/campaigns', icon: Mail, category: 'Marketing' },
+    { name: 'WebRTC Call Logs', href: '/crm/telephony', icon: PhoneForwarded, category: 'Communications' },
+    { name: 'Expense Claims', href: '/erp/expenses', icon: Receipt, category: 'Operations' },
+    { name: 'Asset Depreciation', href: '/erp/assets', icon: Laptop, category: 'Operations' },
+    { name: 'Payslips & Salary', href: '/hem/payroll', icon: DollarSign, category: 'Payroll' },
+    { name: 'Shift Rosters', href: '/hem/shifts', icon: CalendarDays, category: 'HR Tasks' }
+  ];
+
+  const combinedSearchIndex = [...allModules, ...deepFeatures];
+
   const searchResults = searchQuery.trim() === '' 
     ? [] 
-    : allModules.filter(m => m.name.toLowerCase().includes(searchQuery.toLowerCase()) || m.category.toLowerCase().includes(searchQuery.toLowerCase()));
+    : combinedSearchIndex.filter(m => m.name.toLowerCase().includes(searchQuery.toLowerCase()) || m.category.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const renderNavLinks = () => (
     <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
