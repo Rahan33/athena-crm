@@ -9,6 +9,8 @@ import Register from './pages/Register';
 import Chat from './pages/Chat';
 import Mail from './pages/Mail';
 import Calendar from './pages/Calendar';
+import POS from './pages/POS';
+import Writer from './pages/Writer';
 import Meetings from './pages/Meetings';
 import Files from './pages/Files';
 import Approvals from './pages/Approvals';
@@ -120,6 +122,8 @@ function App() {
           <Route path="chat" element={<Chat />} />
           <Route path="mail" element={<Mail />} />
           <Route path="calendar" element={<Calendar />} />
+          <Route path="pos" element={<POS />} />
+          <Route path="writer" element={<Writer />} />
           <Route path="meetings" element={<Meetings />} />
           <Route path="files" element={<Files />} />
           <Route path="approvals" element={<ProtectedRoute adminOnly><Approvals /></ProtectedRoute>} />

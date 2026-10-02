@@ -210,7 +210,7 @@ export default function Layout() {
     { name: 'General Ledger & Transactions', href: '/erp/finance?tab=ledger', icon: List, category: 'Finance Reports' },
     { name: 'Manage Journal Entries', href: '/erp/finance?tab=manage', icon: Edit, category: 'Finance Tasks' },
     // --- Retail & Commerce ---
-    { name: 'Point of Sale (POS)', href: '/crm/sales?tab=pos', icon: ShoppingBag, category: 'Retail & Commerce' },
+    { name: 'Point of Sale (POS)', href: '/pos', icon: ShoppingBag, category: 'Retail & Commerce' },
     { name: 'eCommerce Storefront', href: '/crm/sales?tab=ecommerce', icon: ShoppingBag, category: 'Retail & Commerce' },
     { name: 'ONDC Network Integration', href: '/crm/sales?tab=ondc', icon: ShoppingBag, category: 'Retail & Commerce' },
     { name: 'Payments & Checkout', href: '/erp/finance?tab=payments', icon: CreditCard, category: 'Retail & Commerce' },
@@ -234,7 +234,7 @@ export default function Layout() {
     
     // --- Office & Productivity ---
     { name: 'Secure Email Hosting (Mail)', href: '/mail', icon: Mail, category: 'Workspace' },
-    { name: 'Word Processor (Writer)', href: '/files?tab=word', icon: FileText, category: 'Workspace' },
+    { name: 'Word Processor (Writer)', href: '/writer', icon: FileText, category: 'Workspace' },
     { name: 'Spreadsheets (Sheet)', href: '/files?tab=sheets', icon: FileSpreadsheet, category: 'Workspace' },
     { name: 'Presentations (Show)', href: '/files?tab=slides', icon: MonitorPlay, category: 'Workspace' },
     { name: 'Digital Signatures (Sign)', href: '/files?tab=signatures', icon: PenTool, category: 'Workspace' },
