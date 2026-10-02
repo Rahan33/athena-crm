@@ -186,7 +186,15 @@ export default function Layout() {
     { name: 'Stock Groups & Units of Measure', href: '/erp/inventory', icon: Package, category: 'Inventory Hub' },
     { name: '[Projects] Hub', href: '/erp/projects', icon: LayoutDashboard, category: 'Project Management' },
     { name: 'Role Dashboards (Employee, Manager, HR)', href: '/hr', icon: Users, category: 'HR Suite' },
-    { name: 'Business OS Executive Pulse', href: '/os', icon: Target, category: 'Executive Dashboard' }
+    { name: 'Business OS Executive Pulse', href: '/os', icon: Target, category: 'Executive Dashboard' },
+    { name: 'Multiple Companies Management', href: '/os', icon: Building2, category: 'System Settings' },
+    { name: 'Multi-Currency Master', href: '/erp/finance', icon: DollarSign, category: 'Finance Tasks' },
+    { name: 'Multi-Location Branches', href: '/os', icon: MapPin, category: 'System Settings' },
+    { name: 'Accounting Period Locks', href: '/erp/finance', icon: Lock, category: 'Finance Tasks' },
+    { name: 'Document Numbering Series', href: '/erp/invoicing', icon: FileText, category: 'Invoicing' },
+    { name: 'Remote Work & Live Collaboration', href: '/crm/chat', icon: MessageSquare, category: 'Communications' },
+    { name: 'Cloud Backup & Disaster Recovery', href: '/os', icon: Cloud, category: 'System Settings' },
+    { name: 'TallyPrime Edit Log (Audit Trail)', href: '/erp/finance', icon: FileCheck, category: 'Compliance' }
   ];
 
   const combinedSearchIndex = [...allModules, ...deepFeatures];
