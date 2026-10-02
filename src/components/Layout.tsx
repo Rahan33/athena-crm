@@ -177,7 +177,16 @@ export default function Layout() {
     { name: 'Gantt Charts & Milestones', href: '/erp/projects', icon: CalendarDays, category: 'Project Management' },
     { name: 'Timesheets & Resource Allocation', href: '/erp/projects', icon: Clock, category: 'Project Management' },
     { name: 'Diversity Metrics & Turnover', href: '/hr', icon: Users, category: 'HR Analytics' },
-    { name: 'Credit Limits & Collections', href: '/erp/finance', icon: BadgeDollarSign, category: 'Finance Tasks' }
+    { name: 'Credit Limits & Collections', href: '/erp/finance', icon: BadgeDollarSign, category: 'Finance Tasks' },
+    { name: 'Multi-Godown Stock Matrix', href: '/erp/inventory', icon: Package, category: 'Inventory Hub' },
+    { name: 'Inter-Godown Transfer Journal', href: '/erp/inventory', icon: GitBranch, category: 'Inventory Hub' },
+    { name: 'Manufacturing (BOM & Job Work)', href: '/erp/inventory', icon: FileCheck, category: 'Inventory Hub' },
+    { name: 'Physical Stock Verification & Audit', href: '/erp/inventory', icon: ShieldCheck, category: 'Inventory Hub' },
+    { name: 'Stock Movement Ledger & Valuation', href: '/erp/inventory', icon: BarChart3, category: 'Inventory Hub' },
+    { name: 'Stock Groups & Units of Measure', href: '/erp/inventory', icon: Package, category: 'Inventory Hub' },
+    { name: '[Projects] Hub', href: '/erp/projects', icon: LayoutDashboard, category: 'Project Management' },
+    { name: 'Role Dashboards (Employee, Manager, HR)', href: '/hr', icon: Users, category: 'HR Suite' },
+    { name: 'Business OS Executive Pulse', href: '/os', icon: Target, category: 'Executive Dashboard' }
   ];
 
   const combinedSearchIndex = [...allModules, ...deepFeatures];
