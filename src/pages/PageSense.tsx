@@ -1,27 +1,36 @@
 import React from 'react';
-import { Box, Settings, ArrowLeft } from 'lucide-react';
+import { MousePointer2, Activity, LayoutDashboard, Eye } from 'lucide-react';
 
 export default function PageSense() {
   return (
-    <div className="h-[calc(100vh-4rem)] flex flex-col bg-gray-50 overflow-hidden">
-      <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between shadow-sm z-10">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600">
-            <Box className="w-6 h-6" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">PageSense Engine</h1>
-            <p className="text-xs text-gray-500 font-medium">Athena Business OS Native Module</p>
+    <div className="h-[calc(100vh-4rem)] bg-gray-50 p-6 overflow-y-auto">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">PageSense (A/B & Heatmaps)</h1>
+          <p className="text-sm text-gray-500">Track user behavior and optimize conversions.</p>
+        </div>
+        <button className="bg-rose-600 text-white px-4 py-2 rounded-lg font-bold">New Experiment</button>
+      </div>
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+        <h3 className="font-bold text-gray-900 mb-4 border-b border-gray-100 pb-4">Live A/B Tests</h3>
+        <div className="space-y-4">
+          <div className="p-4 bg-rose-50 border border-rose-100 rounded-xl">
+             <div className="flex justify-between items-center mb-4">
+               <div className="font-bold text-rose-900">Checkout Button Color</div>
+               <div className="text-xs font-bold text-rose-600 bg-rose-100 px-2 py-1 rounded">Running (72% Confidence)</div>
+             </div>
+             <div className="grid grid-cols-2 gap-4">
+               <div className="bg-white p-4 rounded-lg shadow-sm">
+                 <div className="text-xs text-gray-500 font-bold">Variant A (Original - Blue)</div>
+                 <div className="text-2xl font-black text-gray-900 mt-1">2.4% <span className="text-xs font-normal text-gray-500">Conv. Rate</span></div>
+               </div>
+               <div className="bg-white p-4 rounded-lg shadow-sm border-2 border-rose-500">
+                 <div className="text-xs text-rose-600 font-bold">Variant B (Challenger - Green)</div>
+                 <div className="text-2xl font-black text-rose-600 mt-1">3.8% <span className="text-xs font-normal text-rose-500">Conv. Rate</span></div>
+               </div>
+             </div>
           </div>
         </div>
-        <button className="px-4 py-2 bg-gray-100 text-gray-700 font-bold rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2 text-sm">
-          <Settings className="w-4 h-4" /> Configure
-        </button>
-      </div>
-      <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-gray-50">
-        <Box className="w-24 h-24 text-gray-300 mb-6" />
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">PageSense Dashboard is Active</h2>
-        <p className="text-gray-500 max-w-md mx-auto">This module is currently running on the Athena Core architecture. Use the configuration panel to connect databases and APIs.</p>
       </div>
     </div>
   );

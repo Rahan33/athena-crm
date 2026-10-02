@@ -1,27 +1,40 @@
 import React from 'react';
-import { Box, Settings, ArrowLeft } from 'lucide-react';
+import { MapPin, Star, MessageSquare } from 'lucide-react';
 
 export default function Publish() {
   return (
-    <div className="h-[calc(100vh-4rem)] flex flex-col bg-gray-50 overflow-hidden">
-      <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between shadow-sm z-10">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600">
-            <Box className="w-6 h-6" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">Publish Engine</h1>
-            <p className="text-xs text-gray-500 font-medium">Athena Business OS Native Module</p>
-          </div>
+    <div className="h-[calc(100vh-4rem)] bg-gray-50 p-6 overflow-y-auto">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Local Listings (Publish)</h1>
+          <p className="text-sm text-gray-500">Sync Google My Business, Yelp, and Apple Maps.</p>
         </div>
-        <button className="px-4 py-2 bg-gray-100 text-gray-700 font-bold rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2 text-sm">
-          <Settings className="w-4 h-4" /> Configure
-        </button>
       </div>
-      <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-gray-50">
-        <Box className="w-24 h-24 text-gray-300 mb-6" />
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Publish Dashboard is Active</h2>
-        <p className="text-gray-500 max-w-md mx-auto">This module is currently running on the Athena Core architecture. Use the configuration panel to connect databases and APIs.</p>
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 max-w-4xl">
+        <div className="flex items-center justify-between mb-8">
+           <div className="flex items-center gap-4">
+             <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600"><MapPin className="w-8 h-8"/></div>
+             <div>
+               <h2 className="text-xl font-bold text-gray-900">Athena HQ (San Francisco)</h2>
+               <div className="flex items-center gap-1 text-sm text-gray-500 mt-1">4.8 <Star className="w-4 h-4 text-yellow-400 fill-yellow-400"/> (128 Reviews)</div>
+             </div>
+           </div>
+           <div className="text-right">
+             <div className="text-sm font-bold text-gray-500 mb-1">Local SEO Score</div>
+             <div className="text-3xl font-black text-green-600">92/100</div>
+           </div>
+        </div>
+        <h3 className="font-bold text-gray-900 mb-4">Recent Reviews</h3>
+        <div className="space-y-4">
+           <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+             <div className="flex justify-between mb-2">
+               <div className="font-bold text-sm text-gray-900">Google User</div>
+               <div className="flex"><Star className="w-3 h-3 text-yellow-400 fill-yellow-400"/><Star className="w-3 h-3 text-yellow-400 fill-yellow-400"/><Star className="w-3 h-3 text-yellow-400 fill-yellow-400"/><Star className="w-3 h-3 text-yellow-400 fill-yellow-400"/><Star className="w-3 h-3 text-yellow-400 fill-yellow-400"/></div>
+             </div>
+             <p className="text-sm text-gray-600 mb-3">Great software company. Support team is amazing.</p>
+             <button className="text-xs font-bold text-blue-600 hover:underline">Reply to Review</button>
+           </div>
+        </div>
       </div>
     </div>
   );

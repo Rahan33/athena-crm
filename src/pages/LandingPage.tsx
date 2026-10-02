@@ -1,27 +1,52 @@
 import React from 'react';
-import { Box, Settings, ArrowLeft } from 'lucide-react';
+import { Layout, MousePointerClick, TrendingUp, Users } from 'lucide-react';
 
 export default function LandingPage() {
   return (
-    <div className="h-[calc(100vh-4rem)] flex flex-col bg-gray-50 overflow-hidden">
-      <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between shadow-sm z-10">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600">
-            <Box className="w-6 h-6" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">LandingPage Engine</h1>
-            <p className="text-xs text-gray-500 font-medium">Athena Business OS Native Module</p>
-          </div>
+    <div className="h-[calc(100vh-4rem)] bg-gray-50 p-6 overflow-y-auto">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Landing Pages</h1>
+          <p className="text-sm text-gray-500">Manage high-converting squeeze pages and lead magnets.</p>
         </div>
-        <button className="px-4 py-2 bg-gray-100 text-gray-700 font-bold rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2 text-sm">
-          <Settings className="w-4 h-4" /> Configure
-        </button>
+        <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold">Create New Page</button>
       </div>
-      <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-gray-50">
-        <Box className="w-24 h-24 text-gray-300 mb-6" />
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">LandingPage Dashboard is Active</h2>
-        <p className="text-gray-500 max-w-md mx-auto">This module is currently running on the Athena Core architecture. Use the configuration panel to connect databases and APIs.</p>
+      <div className="grid grid-cols-3 gap-6 mb-8">
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+          <div className="text-gray-500 font-bold text-sm mb-2">Total Visitors</div>
+          <div className="text-3xl font-black text-gray-900">14,290</div>
+        </div>
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+          <div className="text-gray-500 font-bold text-sm mb-2">Leads Captured</div>
+          <div className="text-3xl font-black text-indigo-600">3,104</div>
+        </div>
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+          <div className="text-gray-500 font-bold text-sm mb-2">Avg Conversion Rate</div>
+          <div className="text-3xl font-black text-green-600">21.7%</div>
+        </div>
+      </div>
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <table className="w-full text-left">
+          <thead className="bg-gray-50 border-b border-gray-200 text-xs uppercase font-black text-gray-500">
+            <tr><th className="p-4">Page Name</th><th className="p-4">Status</th><th className="p-4">Views</th><th className="p-4">Conversions</th><th className="p-4">Action</th></tr>
+          </thead>
+          <tbody className="text-sm">
+            <tr className="border-b border-gray-100 hover:bg-gray-50">
+              <td className="p-4 font-bold text-gray-900">Q4 E-Book Download</td>
+              <td className="p-4"><span className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">Published</span></td>
+              <td className="p-4 text-gray-600">8,402</td>
+              <td className="p-4 font-bold text-indigo-600">28.4% (2,386)</td>
+              <td className="p-4"><button className="text-indigo-600 font-bold hover:underline">Edit Builder</button></td>
+            </tr>
+            <tr className="border-b border-gray-100 hover:bg-gray-50">
+              <td className="p-4 font-bold text-gray-900">Webinar Registration (Nov)</td>
+              <td className="p-4"><span className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-bold">A/B Testing</span></td>
+              <td className="p-4 text-gray-600">5,888</td>
+              <td className="p-4 font-bold text-indigo-600">12.2% (718)</td>
+              <td className="p-4"><button className="text-indigo-600 font-bold hover:underline">Edit Builder</button></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );
