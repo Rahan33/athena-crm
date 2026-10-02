@@ -152,7 +152,32 @@ export default function Layout() {
     { name: 'Expense Claims', href: '/erp/expenses', icon: Receipt, category: 'Operations' },
     { name: 'Asset Depreciation', href: '/erp/assets', icon: Laptop, category: 'Operations' },
     { name: 'Payslips & Salary', href: '/hem/payroll', icon: DollarSign, category: 'Payroll' },
-    { name: 'Shift Rosters', href: '/hem/shifts', icon: CalendarDays, category: 'HR Tasks' }
+    { name: 'Shift Rosters', href: '/hem/shifts', icon: CalendarDays, category: 'HR Tasks' },
+    { name: 'Batches & Expiry Tracker', href: '/erp/inventory', icon: Package, category: 'Inventory Tasks' },
+    { name: 'Low Stock Alerts & Reorder Levels', href: '/erp/inventory', icon: BellRing, category: 'Inventory Tasks' },
+    { name: 'Barcode Generation', href: '/erp/inventory', icon: Package, category: 'Inventory Tasks' },
+    { name: 'Warehouse Transfers', href: '/erp/inventory', icon: GitBranch, category: 'Inventory Tasks' },
+    { name: 'SKU & Variant Management', href: '/erp/inventory', icon: Package, category: 'Inventory Tasks' },
+    { name: 'Inventory Valuations (FIFO/LIFO)', href: '/erp/inventory', icon: BarChart3, category: 'Inventory Tasks' },
+    { name: 'Supplier Ratings & Vendor Portals', href: '/erp/purchases', icon: UserSquare2, category: 'Procurement' },
+    { name: 'Purchase Requisitions (PR) & RFQs', href: '/erp/purchases', icon: ShoppingCart, category: 'Procurement' },
+    { name: 'Debit Notes & Purchase Returns', href: '/erp/purchases', icon: Receipt, category: 'Procurement' },
+    { name: 'Cash Flow Statement', href: '/erp/finance', icon: DollarSign, category: 'Finance Tasks' },
+    { name: 'Bank Reconciliation (BRS)', href: '/erp/finance', icon: FileCheck, category: 'Finance Tasks' },
+    { name: 'GST & Tax Filing', href: '/erp/finance', icon: Scale, category: 'Finance Tasks' },
+    { name: 'Budgeting & Cost Centers', href: '/erp/finance', icon: Target, category: 'Finance Tasks' },
+    { name: 'Income Tax Declarations & TDS', href: '/hem/payroll', icon: Scale, category: 'Payroll' },
+    { name: 'Salary Slips & Arrears', href: '/hem/payroll', icon: FileText, category: 'Payroll' },
+    { name: 'Sales Orders (SO)', href: '/crm/sales', icon: Receipt, category: 'Sales Tasks' },
+    { name: 'Delivery Challans', href: '/crm/sales', icon: Package, category: 'Sales Tasks' },
+    { name: 'Lead Scoring & Funnel', href: '/crm/leads', icon: Users, category: 'Sales Tasks' },
+    { name: 'SLA Monitoring & Escalations', href: '/crm/tickets', icon: Timer, category: 'Service' },
+    { name: 'IT Asset Management', href: '/erp/assets', icon: Laptop, category: 'Operations' },
+    { name: 'Warranty Tracking', href: '/erp/assets', icon: ShieldCheck, category: 'Operations' },
+    { name: 'Gantt Charts & Milestones', href: '/erp/projects', icon: CalendarDays, category: 'Project Management' },
+    { name: 'Timesheets & Resource Allocation', href: '/erp/projects', icon: Clock, category: 'Project Management' },
+    { name: 'Diversity Metrics & Turnover', href: '/hr', icon: Users, category: 'HR Analytics' },
+    { name: 'Credit Limits & Collections', href: '/erp/finance', icon: BadgeDollarSign, category: 'Finance Tasks' }
   ];
 
   const combinedSearchIndex = [...allModules, ...deepFeatures];
