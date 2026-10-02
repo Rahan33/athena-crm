@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { MapPin, Cloud,  useState, useEffect, useRef } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Search, Users, LayoutDashboard, MessageSquare, Video, FolderGit2, Zap, LogOut, 
