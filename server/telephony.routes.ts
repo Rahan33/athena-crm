@@ -39,8 +39,11 @@ router.post('/voice', (req, res) => {
   const body = req.body || {};
   let callerId = body.CallerId || ''; 
   if (callerId && !callerId.startsWith('+')) callerId = '+' + callerId.trim();
+  callerId = callerId.replace(/\s/g, '');
+  
   let to = body.To || '';
   if (to && !to.startsWith('+')) to = '+' + to.trim();
+  to = to.replace(/\s/g, '');
   const callSid = body.CallSid;
 
   if (callSid) {

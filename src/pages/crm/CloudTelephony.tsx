@@ -296,7 +296,7 @@ export default function CloudTelephony() {
       const call = await device.connect({
         params: {
           To: cleanNumber,
-          CallerId: selectedFromNumber
+          CallerId: selectedFromNumber.replace(/\s/g, '')
         }
       });
       twilioCall.current = call;
