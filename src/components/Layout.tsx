@@ -194,7 +194,16 @@ export default function Layout() {
     { name: 'Document Numbering Series', href: '/erp/invoicing', icon: FileText, category: 'Invoicing' },
     { name: 'Remote Work & Live Collaboration', href: '/chat', icon: MessageSquare, category: 'Communications' },
     { name: 'Cloud Backup & Disaster Recovery', href: '/os', icon: Cloud, category: 'System Settings' },
-    { name: 'TallyPrime Edit Log (Audit Trail)', href: '/erp/finance', icon: FileCheck, category: 'Compliance' }
+    { name: 'TallyPrime Edit Log (Audit Trail)', href: '/erp/finance', icon: FileCheck, category: 'Compliance' },
+    { name: 'Profit & Loss Statement (P&L)', href: '/erp/finance', icon: BarChart3, category: 'Finance Reports' },
+    { name: 'Balance Sheet', href: '/erp/finance', icon: FileSpreadsheet, category: 'Finance Reports' },
+    { name: 'Trial Balance', href: '/erp/finance', icon: Scale, category: 'Finance Reports' },
+    { name: 'Cash Flow', href: '/erp/finance', icon: DollarSign, category: 'Finance Reports' },
+    { name: 'Double-Entry Vouchers', href: '/erp/finance', icon: Receipt, category: 'Finance Tasks' },
+    { name: 'GST IMS Inbox', href: '/erp/finance', icon: ShieldCheck, category: 'Finance Compliance' },
+    { name: 'Cost Centres', href: '/erp/finance', icon: Building2, category: 'Finance Tasks' },
+    { name: 'Budgets & Variance', href: '/erp/finance', icon: Target, category: 'Finance Tasks' },
+    { name: 'Financial Ratios', href: '/erp/finance', icon: BarChart3, category: 'Finance Reports' }
   ];
 
   const combinedSearchIndex = [...allModules, ...deepFeatures];
