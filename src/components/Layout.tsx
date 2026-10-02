@@ -192,7 +192,7 @@ export default function Layout() {
     { name: 'Multi-Location Branches', href: '/os', icon: MapPin, category: 'System Settings' },
     { name: 'Accounting Period Locks', href: '/erp/finance', icon: Lock, category: 'Finance Tasks' },
     { name: 'Document Numbering Series', href: '/erp/invoicing', icon: FileText, category: 'Invoicing' },
-    { name: 'Remote Work & Live Collaboration', href: '/crm/chat', icon: MessageSquare, category: 'Communications' },
+    { name: 'Remote Work & Live Collaboration', href: '/chat', icon: MessageSquare, category: 'Communications' },
     { name: 'Cloud Backup & Disaster Recovery', href: '/os', icon: Cloud, category: 'System Settings' },
     { name: 'TallyPrime Edit Log (Audit Trail)', href: '/erp/finance', icon: FileCheck, category: 'Compliance' }
   ];
