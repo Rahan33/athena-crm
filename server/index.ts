@@ -194,6 +194,7 @@ app.use('/api/recruitment', recruitmentRoutes);
 app.use('/api/hr', hrRoutes);
 app.use('/api/telephony', telephonyRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/ai-whatsapp', aiWhatsappRoutes);
 
 import fs from 'fs';
 
