@@ -7,7 +7,7 @@ import {
   FileSpreadsheet, Compass, FileCheck, Mail, GitBranch, BarChart3, Award,
   UserCheck, BellRing, FileCheck2, FolderLock, Megaphone, HeartHandshake, Scale, Building2,
   Fingerprint, CalendarCheck, CalendarDays, Timer, Camera, Smartphone,
-  FileText, ShoppingCart, BadgeDollarSign, PhoneForwarded
+  FileText, ShoppingCart, BadgeDollarSign, PhoneForwarded, MessageCircle
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -245,22 +245,15 @@ export default function Layout() {
 
     // --- Developer & IT Management ---
     { name: 'Low-Code App Builder (Creator)', href: '/creator', icon: Code, category: 'Developers' },
-    { name: 'AI WhatsApp & Call Agent', href: '/ai-whatsapp', icon: MessageCircle, category: 'AI Services' },
     { name: 'API Integrations (Flow)', href: '/flow', icon: Workflow, category: 'Developers' },
-    { name: 'AI WhatsApp & Call Agent', href: '/ai-whatsapp', icon: MessageCircle, category: 'AI Services' },
     { name: 'Robotic Process Automation (RPA)', href: '/rpa', icon: Bot, category: 'Developers' },
-    { name: 'AI WhatsApp & Call Agent', href: '/ai-whatsapp', icon: MessageCircle, category: 'AI Services' },
     { name: 'Cloud Hosting (Catalyst)', href: '/catalyst', icon: Cloud, category: 'Developers' },
-    { name: 'AI WhatsApp & Call Agent', href: '/ai-whatsapp', icon: MessageCircle, category: 'AI Services' },
     { name: 'Test Automation (QEngine)', href: '/qengine', icon: TestTube, category: 'Developers' },
-    { name: 'AI WhatsApp & Call Agent', href: '/ai-whatsapp', icon: MessageCircle, category: 'AI Services' },
     { name: 'IoT Devices Platform', href: '/iot', icon: Cpu, category: 'Developers' },
-    { name: 'AI WhatsApp & Call Agent', href: '/ai-whatsapp', icon: MessageCircle, category: 'AI Services' },
     { name: 'DataPrep (ETL)', href: '/dataprep', icon: Database, category: 'Developers' },
-    { name: 'AI WhatsApp & Call Agent', href: '/ai-whatsapp', icon: MessageCircle, category: 'AI Services' },
     { name: 'AI Agents & MCP', href: '/agents', icon: Bot, category: 'Developers' },
-    { name: 'AI WhatsApp & Call Agent', href: '/ai-whatsapp', icon: MessageCircle, category: 'AI Services' },
 
+    { name: 'AI WhatsApp & Call Agent', href: '/ai-whatsapp', icon: MessageCircle, category: 'AI Services' },
     // --- IT Infrastructure & Security ---
     { name: 'Password Manager (Vault)', href: '/vault', icon: Key, category: 'IT Security' },
     { name: 'Identity & SSO (Directory)', href: '/directory', icon: Fingerprint, category: 'IT Security' },
