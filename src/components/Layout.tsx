@@ -111,6 +111,17 @@ export default function Layout() {
     { name: 'Payments', href: '/payments', icon: CreditCard },
   ];
 
+    const developerNavItems = [
+    { name: 'App Creator', href: '/creator', icon: Code },
+    { name: 'API Flow', href: '/flow', icon: Workflow },
+    { name: 'RPA Bots', href: '/rpa', icon: Bot },
+    { name: 'Catalyst Cloud', href: '/catalyst', icon: Cloud },
+    { name: 'QEngine (QA)', href: '/qengine', icon: TestTube },
+    { name: 'IoT Devices', href: '/iot', icon: Cpu },
+    { name: 'DataPrep (ETL)', href: '/dataprep', icon: Database },
+    { name: 'AI Agents', href: '/agents', icon: Bot },
+  ];
+
   const officeNavItems = [
     { name: 'Writer', href: '/writer', icon: FileText },
     { name: 'Sheet', href: '/sheet', icon: FileSpreadsheet },
@@ -490,6 +501,29 @@ export default function Layout() {
           )}
         >
           <item.icon className={cn("mr-3 h-5 w-5", location.pathname === item.href ? "text-teal-600" : "text-gray-400")} />
+          {item.name}
+        </Link>
+      ))}
+
+
+            {/* TIER 8: DEVELOPER & AUTOMATION */}
+      <div className="pt-4 pb-1">
+        <div className="flex items-center justify-between px-3">
+          <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">Dev & Automation</p>
+        </div>
+      </div>
+      {developerNavItems.map((item) => (
+        <Link
+          key={item.name}
+          to={item.href}
+          className={cn(
+            "flex items-center px-3 py-2.5 rounded-md text-sm font-medium transition-colors",
+            location.pathname === item.href 
+              ? "bg-slate-800 text-white font-semibold shadow-xs" 
+              : "text-gray-700 hover:bg-gray-100"
+          )}
+        >
+          <item.icon className={cn("mr-3 h-5 w-5", location.pathname === item.href ? "text-slate-300" : "text-gray-400")} />
           {item.name}
         </Link>
       ))}
