@@ -14,6 +14,7 @@ import recruitmentRoutes from './recruitment.routes';
 import hrRoutes from './hr.routes';
 import telephonyRoutes from './telephony.routes';
 import authRoutes from './auth.routes';
+import posRoutes from './pos.routes';
 
 import multer from 'multer';
 import path from 'path';
@@ -194,6 +195,7 @@ app.use('/api/recruitment', recruitmentRoutes);
 app.use('/api/hr', hrRoutes);
 app.use('/api/telephony', telephonyRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/pos', posRoutes);
 app.use('/api/ai-whatsapp', aiWhatsappRoutes);
 
 import fs from 'fs';

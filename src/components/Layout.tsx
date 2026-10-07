@@ -194,6 +194,14 @@ export default function Layout() {
   ];
 
   const deepFeatures = [
+    { name: 'POS Checkout System', href: '/pos', icon: ShoppingCart, category: 'Retail Tools' },
+    { name: 'Scan POS Barcodes', href: '/pos', icon: Target, category: 'Retail Tools' },
+    { name: 'Print POS Receipt', href: '/pos', icon: FileText, category: 'Retail Tools' },
+    { name: 'Compose New Email', href: '/mail', icon: Mail, category: 'Communications' },
+    { name: 'AI Email Auto-Drafts', href: '/mail', icon: Mail, category: 'Communications' },
+    { name: 'Start Video Meeting', href: '/meetings', icon: Video, category: 'Communications' },
+    { name: 'Meeting AI Transcripts', href: '/meetings', icon: FileCheck, category: 'Communications' },
+    { name: 'Live WebSockets Testing', href: '/ai-whatsapp', icon: Zap, category: 'Developer' },
     { name: 'Storage Rules & Bin Locations', href: '/erp/inventory', icon: Package, category: 'Inventory Tasks' },
     { name: 'Stock Adjustments', href: '/erp/inventory', icon: Package, category: 'Inventory Tasks' },
     { name: 'Bill of Materials (BOM)', href: '/erp/inventory', icon: GitBranch, category: 'Inventory Tasks' },

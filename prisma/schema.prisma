@@ -397,3 +397,69 @@ model AuditLog {
   user        User?    @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
 }
+
+
+// ==========================================
+// RETAIL & COMMERCE (POS)
+// ==========================================
+model PosProduct {
+  id          String   @id @default(uuid())
+  name        String
+  sku         String   @unique
+  barcode     String   @unique
+  price       Float
+  stock       Int      @default(0)
+  category    String   @default("General")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  orderItems  PosOrderItem[]
+}
+
+model PosOrder {
+  id          String   @id @default(uuid())
+  receiptId   String   @unique
+  cashierId   String
+  subtotal    Float
+  tax         Float
+  total       Float
+  paymentType String   // Cash, Card, UPI
+  status      String   @default("Completed")
+  createdAt   DateTime @default(now())
+  items       PosOrderItem[]
+}
+
+model PosOrderItem {
+  id          String     @id @default(uuid())
+  orderId     String
+  order       PosOrder   @relation(fields: [orderId], references: [id])
+  productId   String
+  product     PosProduct @relation(fields: [productId], references: [id])
+  quantity    Int
+  priceAtSale Float
+}
+
+// ==========================================
+// AI & COMMUNICATIONS
+// ==========================================
+model EmailMessage {
+  id          String   @id @default(uuid())
+  threadId    String?
+  subject     String
+  from        String
+  to          String
+  body        String
+  status      String   @default("Sent") // Draft, Sent, Received
+  isAiDrafted Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model MeetingSession {
+  id          String   @id @default(uuid())
+  roomCode    String   @unique
+  hostId      String
+  title       String
+  status      String   @default("Active") // Active, Ended
+  transcript  String?
+  createdAt   DateTime @default(now())
+  endedAt     DateTime?
+}
