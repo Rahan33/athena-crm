@@ -111,7 +111,17 @@ export default function Layout() {
     { name: 'Payments', href: '/payments', icon: CreditCard },
   ];
 
-    const developerNavItems = [
+      const itNavItems = [
+    { name: 'Password Vault', href: '/vault', icon: Lock },
+    { name: 'Identity (Directory)', href: '/directory', icon: Fingerprint },
+    { name: 'Device Manager (MDM)', href: '/mdm', icon: Smartphone },
+    { name: 'Server Monitoring', href: '/monitoring', icon: Activity },
+    { name: 'Patch Manager', href: '/patch', icon: ShieldCheck },
+    { name: 'Threat Detect (SIEM)', href: '/siem', icon: AlertOctagon },
+    { name: 'IT Helpdesk', href: '/servicedesk', icon: LifeBuoy },
+  ];
+
+  const developerNavItems = [
     { name: 'App Creator', href: '/creator', icon: Code },
     { name: 'API Flow', href: '/flow', icon: Workflow },
     { name: 'RPA Bots', href: '/rpa', icon: Bot },
@@ -524,6 +534,29 @@ export default function Layout() {
           )}
         >
           <item.icon className={cn("mr-3 h-5 w-5", location.pathname === item.href ? "text-slate-300" : "text-gray-400")} />
+          {item.name}
+        </Link>
+      ))}
+
+
+            {/* TIER 9: IT & SECURITY */}
+      <div className="pt-4 pb-1">
+        <div className="flex items-center justify-between px-3">
+          <p className="text-xs font-bold text-cyan-700 uppercase tracking-wider">IT Infrastructure</p>
+        </div>
+      </div>
+      {itNavItems.map((item) => (
+        <Link
+          key={item.name}
+          to={item.href}
+          className={cn(
+            "flex items-center px-3 py-2.5 rounded-md text-sm font-medium transition-colors",
+            location.pathname === item.href 
+              ? "bg-cyan-50 text-cyan-700 font-semibold shadow-xs" 
+              : "text-gray-700 hover:bg-gray-100"
+          )}
+        >
+          <item.icon className={cn("mr-3 h-5 w-5", location.pathname === item.href ? "text-cyan-600" : "text-gray-400")} />
           {item.name}
         </Link>
       ))}
