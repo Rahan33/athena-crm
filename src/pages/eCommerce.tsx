@@ -1,8 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ShoppingBag, Package, Users, BarChart3, Settings, Plus, Search, Tag, Eye, ArrowUpRight, CheckCircle2 } from 'lucide-react';
 
 export default function ECommerce() {
   const [activeTab, setActiveTab] = useState('overview');
+  const [orders, setOrders] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  const fetchOrders = async () => {
+    try {
+      const res = await fetch('/api/ecommerce/orders');
+      const data = await res.json();
+      if (data.success) {
+        setOrders(data.orders);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const markShipped = async (id: string) => {
+    try {
+      const res = await fetch(`/api/ecommerce/orders/` + id + `/ship`, { method: 'PUT' });
+      const data = await res.json();
+      if (data.success) {
+        alert('Order marked as shipped! Tracking: ' + data.trackingNumber);
+        fetchOrders();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const simulateOnlinePurchase = async () => {
+    try {
+      const res = await fetch('/api/ecommerce/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerName: "Jane Doe " + Math.floor(Math.random()*100),
+          customerEmail: "jane@example.com",
+          shippingAddress: "123 Main St",
+          totalAmount: 299.99,
+          items: [{ sku: "HW-101", quantity: 1, name: "Headphones" }]
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('Customer just bought an item on your website!\nOrder: ' + data.orderNumber + '\n\nOmnichannel Sync: POS Inventory was automatically deducted!');
+        fetchOrders();
+      }
+    } catch(e) {
+      alert('Error simulating checkout');
+    }
+  };
 
   return (
     <div className="h-[calc(100vh-4rem)] flex flex-col bg-gray-50 overflow-hidden">
@@ -22,8 +75,8 @@ export default function ECommerce() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <button className="px-4 py-2 bg-gray-100 text-gray-700 font-bold rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2 text-sm">
-            <Eye className="w-4 h-4" /> View Store
+          <button onClick={simulateOnlinePurchase} className="px-4 py-2 bg-pink-100 text-pink-700 font-bold rounded-lg hover:bg-pink-200 transition-colors flex items-center gap-2 text-sm border border-pink-200 shadow-sm">
+            <ShoppingBag className="w-4 h-4" /> Simulate Online Customer Purchase
           </button>
           <button className="px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-2 text-sm shadow-sm">
             <Plus className="w-4 h-4" /> Add Product
@@ -108,20 +161,24 @@ export default function ECommerce() {
                   </tr>
                  </thead>
                  <tbody className="text-sm">
-                   <tr className="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer">
-                     <td className="p-4 font-bold text-indigo-600">#ORD-8991</td>
-                     <td className="p-4 font-semibold text-gray-900">Samantha Miller</td>
-                     <td className="p-4 text-gray-500">Today, 10:42 AM</td>
-                     <td className="p-4"><span className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded font-bold text-xs">Unfulfilled</span></td>
-                     <td className="p-4 font-bold">$129.99</td>
-                   </tr>
-                   <tr className="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer">
-                     <td className="p-4 font-bold text-indigo-600">#ORD-8990</td>
-                     <td className="p-4 font-semibold text-gray-900">David Chen</td>
-                     <td className="p-4 text-gray-500">Today, 09:15 AM</td>
-                     <td className="p-4"><span className="bg-green-100 text-green-700 px-2 py-1 rounded font-bold text-xs flex items-center w-max gap-1"><CheckCircle2 className="w-3 h-3"/> Shipped</span></td>
-                     <td className="p-4 font-bold">$49.50</td>
-                   </tr>
+                   {orders.map(order => (
+                     <tr key={order.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer">
+                       <td className="p-4 font-bold text-indigo-600">{order.orderNumber}</td>
+                       <td className="p-4 font-semibold text-gray-900">{order.customerName}</td>
+                       <td className="p-4 text-gray-500">{new Date(order.createdAt).toLocaleTimeString()}</td>
+                       <td className="p-4">
+                         {order.status === 'Shipped' ? (
+                           <span className="bg-green-100 text-green-700 px-2 py-1 rounded font-bold text-xs flex items-center w-max gap-1"><CheckCircle2 className="w-3 h-3"/> Shipped ({order.trackingNumber})</span>
+                         ) : (
+                           <button onClick={() => markShipped(order.id)} className="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-3 py-1 rounded font-bold text-xs transition-colors">Mark Shipped</button>
+                         )}
+                       </td>
+                       <td className="p-4 font-bold"></td>
+                     </tr>
+                   ))}
+                   {orders.length === 0 && (
+                     <tr><td colSpan={5} className="p-8 text-center text-gray-500">No online orders yet.</td></tr>
+                   )}
                  </tbody>
               </table>
             </div>

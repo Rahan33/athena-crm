@@ -8,7 +8,7 @@ import {
   UserCheck, BellRing, FileCheck2, FolderLock, Megaphone, HeartHandshake, Scale, Building2,
   Fingerprint, CalendarCheck, CalendarDays, Timer, Camera, Smartphone,
   FileText, ShoppingCart, BadgeDollarSign, PhoneForwarded, MessageCircle
-} from 'lucide-react';
+, Truck } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import SideHUD from './SideHUD';
@@ -194,6 +194,9 @@ export default function Layout() {
   ];
 
   const deepFeatures = [
+    { name: 'Upload Product Online', href: '/ecommerce', icon: ShoppingBag, category: 'Retail Tools' },
+    { name: 'Web Orders & Shipping', href: '/ecommerce', icon: Truck, category: 'Retail Tools' },
+    { name: 'Omnichannel Storefront', href: '/ecommerce', icon: Globe, category: 'Retail Tools' },
     { name: 'POS Checkout System', href: '/pos', icon: ShoppingCart, category: 'Retail Tools' },
     { name: 'Scan POS Barcodes', href: '/pos', icon: Target, category: 'Retail Tools' },
     { name: 'Print POS Receipt', href: '/pos', icon: FileText, category: 'Retail Tools' },

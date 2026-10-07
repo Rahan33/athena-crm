@@ -413,6 +413,7 @@ model PosProduct {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   orderItems  PosOrderItem[]
+  webProduct  WebProduct?
 }
 
 model PosOrder {
@@ -462,4 +463,42 @@ model MeetingSession {
   transcript  String?
   createdAt   DateTime @default(now())
   endedAt     DateTime?
+}
+
+// ==========================================
+// ECOMMERCE (STOREFRONT MANAGER)
+// ==========================================
+model OnlineStoreSettings {
+  id          String   @id @default(uuid())
+  domainName  String   @default("myshop.com")
+  themeColor  String   @default("#000000")
+  isActive    Boolean  @default(true)
+  updatedAt   DateTime @updatedAt
+}
+
+model WebProduct {
+  id          String     @id @default(uuid())
+  posProductId String    @unique
+  posProduct  PosProduct @relation(fields: [posProductId], references: [id])
+  title       String
+  description String
+  imageUrl    String
+  seoTags     String
+  isPublished Boolean    @default(true)
+  onlinePrice Float
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model WebOrder {
+  id              String   @id @default(uuid())
+  orderNumber     String   @unique
+  customerName    String
+  customerEmail   String
+  shippingAddress String
+  totalAmount     Float
+  status          String   @default("Processing") // Processing, Shipped, Delivered
+  trackingNumber  String?
+  items           String   // JSON of items ordered
+  createdAt       DateTime @default(now())
 }
