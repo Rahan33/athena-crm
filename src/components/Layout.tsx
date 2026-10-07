@@ -111,7 +111,20 @@ export default function Layout() {
     { name: 'Payments', href: '/payments', icon: CreditCard },
   ];
 
-      const itNavItems = [
+        const successNavItems = [
+    { name: 'Loyalty (Thrive)', href: '/thrive', icon: HeartHandshake },
+    { name: 'In-App Guides (DAP)', href: '/dap', icon: Compass },
+    { name: 'AR Support (Lens)', href: '/lens', icon: ScanFace },
+  ];
+
+  const specializedNavItems = [
+    { name: 'Legal Contracts', href: '/contracts', icon: Scale },
+    { name: 'LMS (Classes)', href: '/classes', icon: GraduationCap },
+    { name: 'Accounting Practice', href: '/practice', icon: Briefcase },
+    { name: 'Bug Tracker', href: '/bugtracker', icon: Bug },
+  ];
+
+  const itNavItems = [
     { name: 'Password Vault', href: '/vault', icon: Lock },
     { name: 'Identity (Directory)', href: '/directory', icon: Fingerprint },
     { name: 'Device Manager (MDM)', href: '/mdm', icon: Smartphone },
@@ -557,6 +570,51 @@ export default function Layout() {
           )}
         >
           <item.icon className={cn("mr-3 h-5 w-5", location.pathname === item.href ? "text-cyan-600" : "text-gray-400")} />
+          {item.name}
+        </Link>
+      ))}
+
+
+            {/* TIER 10: CUSTOMER SUCCESS */}
+      <div className="pt-4 pb-1">
+        <div className="flex items-center justify-between px-3">
+          <p className="text-xs font-bold text-pink-700 uppercase tracking-wider">Customer Success</p>
+        </div>
+      </div>
+      {successNavItems.map((item) => (
+        <Link
+          key={item.name}
+          to={item.href}
+          className={cn(
+            "flex items-center px-3 py-2.5 rounded-md text-sm font-medium transition-colors",
+            location.pathname === item.href 
+              ? "bg-pink-50 text-pink-700 font-semibold shadow-xs" 
+              : "text-gray-700 hover:bg-gray-100"
+          )}
+        >
+          <item.icon className={cn("mr-3 h-5 w-5", location.pathname === item.href ? "text-pink-600" : "text-gray-400")} />
+          {item.name}
+        </Link>
+      ))}
+
+      {/* TIER 11: SPECIALIZED VERTICALS */}
+      <div className="pt-4 pb-1">
+        <div className="flex items-center justify-between px-3">
+          <p className="text-xs font-bold text-emerald-700 uppercase tracking-wider">Specialized Verticals</p>
+        </div>
+      </div>
+      {specializedNavItems.map((item) => (
+        <Link
+          key={item.name}
+          to={item.href}
+          className={cn(
+            "flex items-center px-3 py-2.5 rounded-md text-sm font-medium transition-colors",
+            location.pathname === item.href 
+              ? "bg-emerald-50 text-emerald-700 font-semibold shadow-xs" 
+              : "text-gray-700 hover:bg-gray-100"
+          )}
+        >
+          <item.icon className={cn("mr-3 h-5 w-5", location.pathname === item.href ? "text-emerald-600" : "text-gray-400")} />
           {item.name}
         </Link>
       ))}
