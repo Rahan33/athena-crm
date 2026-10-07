@@ -97,4 +97,51 @@ router.post('/recording-status', (req, res) => {
 });
 
 router.post('/debug-error', (req, res) => { console.log('[FRONTEND ERROR]', req.body); res.sendStatus(200); });
+
+// AI WhatsApp & SMS Messaging API
+router.post('/send-message', async (req, res) => {
+  const { to, message, channel } = req.body;
+  const client = twilio(accountSid, authToken);
+  
+  let formattedTo = to;
+  if (!formattedTo.startsWith('+')) formattedTo = '+' + formattedTo;
+  
+  // If channel is whatsapp, Twilio requires whatsapp prefix
+  if (channel === 'whatsapp') {
+    formattedTo = 'whatsapp:' + formattedTo;
+  }
+  
+  // If sending via WhatsApp without a registered business number, you normally use the Twilio sandbox number
+  // For SMS, we use the user's verified Caller ID
+  let fromNumber = channel === 'whatsapp' ? 'whatsapp:+14155238886' : '+17372508034';
+
+  try {
+    const msg = await client.messages.create({
+      body: message,
+      from: fromNumber,
+      to: formattedTo
+    });
+    
+    // Store it in the CRM state so the UI can reflect it
+    TelephonyStore.calls.unshift({
+      id: msg.sid,
+      callId: 'MSG-' + msg.sid.substring(0, 6),
+      contactName: 'AI Automated Response',
+      phoneNumber: formattedTo,
+      direction: 'Outbound',
+      durationSeconds: 0,
+      status: 'Sent',
+      agentName: 'AI Bot',
+      timestamp: new Date().toISOString(),
+      tags: [channel === 'whatsapp' ? 'WhatsApp' : 'SMS'],
+      hasRecording: false
+    });
+
+    res.json({ success: true, sid: msg.sid, status: msg.status });
+  } catch (err: any) {
+    console.error('Twilio Error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 export default router;

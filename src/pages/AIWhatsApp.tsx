@@ -170,6 +170,57 @@ export default function AIWhatsApp() {
               ))
             )}
           </div>
+          
+          {/* REAL TWILIO SEND PANEL */}
+          <div className="p-4 bg-white border-t border-gray-200 shadow-2xl">
+            <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2"><Phone className="w-4 h-4 text-green-600"/> Live Twilio SMS/WhatsApp Test</h3>
+            <div className="flex gap-3">
+              <input 
+                type="text" 
+                id="twilio-phone"
+                defaultValue="+918870370740" 
+                placeholder="Phone (e.g. +1234567890)" 
+                className="w-48 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm"
+              />
+              <input 
+                type="text" 
+                id="twilio-msg"
+                defaultValue="Hello from Athena AI WhatsApp/SMS Module!" 
+                placeholder="Message content..." 
+                className="flex-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm"
+              />
+              <select id="twilio-channel" className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-bold text-gray-700">
+                <option value="sms">Send as SMS</option>
+                <option value="whatsapp">Send as WhatsApp</option>
+              </select>
+              <button 
+                onClick={async () => {
+                  const to = (document.getElementById('twilio-phone') as HTMLInputElement).value;
+                  const message = (document.getElementById('twilio-msg') as HTMLInputElement).value;
+                  const channel = (document.getElementById('twilio-channel') as HTMLSelectElement).value;
+                  try {
+                    const res = await fetch('/api/telephony/send-message', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ to, message, channel })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                      alert('Successfully dispatched via Twilio!\nMessage SID: ' + data.sid);
+                    } else {
+                      alert('Twilio Error: ' + data.error);
+                    }
+                  } catch (e: any) {
+                    alert('Network error connecting to backend: ' + e.message);
+                  }
+                }}
+                className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition-colors shadow-sm"
+              >
+                Dispatch Message
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
