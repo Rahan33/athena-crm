@@ -38,6 +38,33 @@ export default function POS() {
     setCart(cart.filter(item => item.id !== id));
   };
 
+    const handleCheckout = async (paymentType: string) => {
+    if (cart.length === 0) return alert('Cart is empty!');
+    try {
+      const res = await fetch('/api/pos/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: cart.map(i => ({ id: i.id, cartQty: i.qty, price: i.price })),
+          subtotal,
+          tax,
+          total,
+          paymentType,
+          cashierId: 'CASHIER-1'
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('Payment Successful!\nReceipt ID: ' + data.receiptId + '\n\nPrinting Receipt...');
+        window.print();
+        setCart([]); // Clear cart
+      } else {
+        alert('Checkout failed: ' + data.error);
+      }
+    } catch(err: any) {
+      alert('Error connecting to POS API: ' + err.message);
+    }
+  };
   const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
   const tax = subtotal * 0.08; // 8% tax
   const total = subtotal + tax;
