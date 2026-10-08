@@ -7,7 +7,7 @@ RUN apk add --no-cache openssl
 
 # Copy dependency manifests
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 
 # Copy application source & config
 COPY . .
