@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { MessageCircle, Phone, Bot, Search, Settings, Activity, Truck, CheckCircle2, User, Link2, XCircle, RefreshCw, Key, Shield, Plus } from 'lucide-react';
+import { MessageCircle, Bot, Link2, RefreshCw, Smartphone, QrCode, Shield, CheckCircle2, XCircle, User } from 'lucide-react';
 import axios from 'axios';
 
 export default function AIWhatsApp() {
   const [activeTab, setActiveTab] = useState('conversations');
   const [logs, setLogs] = useState<any[]>([]);
-  const [accounts, setAccounts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Setup modal for new connection
-  const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
-  const [connectForm, setConnectForm] = useState({ phoneNumber: '', businessName: '', provider: 'Meta Business Cloud', apiKey: '' });
-  const [isConnecting, setIsConnecting] = useState(false);
+  // Device Linking State
+  const [webStatus, setWebStatus] = useState<'disconnected' | 'connecting' | 'connected'>('disconnected');
+  const [qrCode, setQrCode] = useState<string | null>(null);
+  const [activeNumber, setActiveNumber] = useState<string | null>(null);
 
   useEffect(() => {
     fetchLogs();
-    fetchAccounts();
-    const interval = setInterval(fetchLogs, 5000);
-    return () => clearInterval(interval);
+    fetchWebStatus();
+    const logInterval = setInterval(fetchLogs, 3000);
+    const webInterval = setInterval(fetchWebStatus, 2000);
+    return () => {
+      clearInterval(logInterval);
+      clearInterval(webInterval);
+    };
   }, []);
 
   const fetchLogs = async () => {
@@ -31,39 +34,33 @@ export default function AIWhatsApp() {
     }
   };
 
-  const fetchAccounts = async () => {
+  const fetchWebStatus = async () => {
     try {
-      const response = await axios.get('/api/ai-whatsapp/accounts');
-      setAccounts(response.data.accounts || []);
-    } catch (error) {
-      console.error("Error fetching accounts:", error);
-    }
-  };
-
-  const handleConnect = async () => {
-    setIsConnecting(true);
-    try {
-      const response = await axios.post('/api/ai-whatsapp/accounts/connect', connectForm);
+      const response = await axios.get('/api/ai-whatsapp/web-status');
       if (response.data.success) {
-        alert('WhatsApp Business Account Connected Successfully!');
-        setIsConnectModalOpen(false);
-        setConnectForm({ phoneNumber: '', businessName: '', provider: 'Meta Business Cloud', apiKey: '' });
-        fetchAccounts();
+        setWebStatus(response.data.status);
+        setQrCode(response.data.qrCode);
+        setActiveNumber(response.data.activeNumber);
       }
     } catch (error) {
-      alert('Failed to connect: ' + error);
-    } finally {
-      setIsConnecting(false);
+      console.error("Error fetching web status:", error);
     }
   };
 
-  const handleDisconnect = async (id: string) => {
-    if (!window.confirm("Disconnect this WhatsApp account?")) return;
+  const startWebConnection = async () => {
     try {
-      await axios.post(`/api/ai-whatsapp/accounts/${id}/disconnect`);
-      fetchAccounts();
+      await axios.post('/api/ai-whatsapp/web-connect');
     } catch (error) {
-      console.error(error);
+      console.error("Error starting connection:", error);
+    }
+  };
+
+  const logoutWebConnection = async () => {
+    if (!window.confirm("Are you sure you want to disconnect your personal WhatsApp?")) return;
+    try {
+      await axios.post('/api/ai-whatsapp/web-disconnect');
+    } catch (error) {
+      console.error("Error disconnecting:", error);
     }
   };
 
@@ -77,7 +74,7 @@ export default function AIWhatsApp() {
             <MessageCircle className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-gray-900">AI WhatsApp & Voice Engine</h1>
+            <h1 className="text-xl font-bold text-gray-900">AI WhatsApp Engine</h1>
             <p className="text-xs text-gray-500 font-medium flex items-center gap-1">
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
               Agent "Athena-Alpha" is Online
@@ -92,17 +89,16 @@ export default function AIWhatsApp() {
             Live Conversations
           </button>
           <button 
-            onClick={() => setActiveTab('integrations')}
-            className={`px-4 py-2 font-bold rounded-lg text-sm transition-colors flex items-center gap-2 ${activeTab === 'integrations' ? 'bg-green-600 text-white shadow-md' : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'}`}
+            onClick={() => setActiveTab('linking')}
+            className={`px-4 py-2 font-bold rounded-lg text-sm transition-colors flex items-center gap-2 ${activeTab === 'linking' ? 'bg-green-600 text-white shadow-md' : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'}`}
           >
-            <Link2 className="w-4 h-4"/> Integrations
+            <Smartphone className="w-4 h-4"/> Device Linking
           </button>
         </div>
       </div>
 
       {activeTab === 'conversations' && (
         <div className="flex-1 flex overflow-hidden">
-          {/* Main Feed */}
           <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full p-4 md:p-6 overflow-hidden">
             <div className="flex-1 overflow-y-auto space-y-4 pr-2">
               {loading && <div className="text-center p-8 text-gray-400 font-medium">Booting AI Engine...</div>}
@@ -120,24 +116,24 @@ export default function AIWhatsApp() {
                       <div>
                         <h3 className="font-bold text-gray-900">{log.customerName}</h3>
                         <p className="text-xs text-gray-500 font-medium flex items-center gap-1">
-                          <MessageCircle className="w-3 h-3 text-green-500" /> {log.channel} â€¢ {new Date(log.timestamp).toLocaleTimeString()}
+                          <MessageCircle className="w-3 h-3 text-green-500" /> {log.channel} • {new Date(log.timestamp).toLocaleTimeString()}
                         </p>
                       </div>
                     </div>
                     <span className="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold border border-green-200 flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5" /> Resolved
+                      <CheckCircle2 className="w-3.5 h-3.5" /> Handled by AI
                     </span>
                   </div>
                   <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 space-y-3">
                     <div className="flex gap-3">
-                      <div className="text-2xl">ðŸ‘¤</div>
+                      <div className="text-2xl">👤</div>
                       <div>
                         <div className="text-xs font-bold text-gray-500 mb-1">Customer</div>
                         <div className="text-sm text-gray-800 font-medium">{log.inboundMessage}</div>
                       </div>
                     </div>
                     <div className="flex gap-3">
-                      <div className="text-2xl">ðŸ¤–</div>
+                      <div className="text-2xl">🤖</div>
                       <div>
                         <div className="text-xs font-bold text-green-600 mb-1 flex items-center gap-1"><Bot className="w-3 h-3"/> Athena AI Reply</div>
                         <div className="text-sm text-gray-800 font-medium bg-white p-3 rounded-xl border border-green-100 shadow-sm">
@@ -150,165 +146,113 @@ export default function AIWhatsApp() {
               ))}
             </div>
             
-            {/* Action Bar */}
-            <div className="mt-4 bg-white border border-gray-200 p-4 rounded-2xl shadow-sm">
-              <h3 className="font-bold text-sm text-gray-700 mb-3 flex items-center gap-2">
-                <Activity className="w-4 h-4 text-blue-500" /> Dispatch Test Message (Twilio API)
-              </h3>
-              <div className="flex gap-3">
-                <input 
-                  type="text" 
-                  id="testPhone"
-                  placeholder="Enter Phone Number (e.g. +1234567890)" 
-                  className="w-1/3 bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm font-medium focus:ring-2 focus:ring-green-500 outline-none"
-                />
-                <input 
-                  type="text" 
-                  id="testMsg"
-                  placeholder="Type a message..." 
-                  className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm font-medium focus:ring-2 focus:ring-green-500 outline-none"
-                />
-                <button 
-                  onClick={async () => {
-                    const to = (document.getElementById('testPhone') as HTMLInputElement).value;
-                    const body = (document.getElementById('testMsg') as HTMLInputElement).value;
-                    if(!to || !body) return alert("Fill out both fields!");
-                    
-                    try {
-                      const res = await fetch('/api/telephony/test-whatsapp', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ to, body })
-                      });
-                      const data = await res.json();
-                      if (data.success) {
-                        alert('Successfully dispatched via Twilio!\nMessage SID: ' + data.sid);
-                      } else {
-                        alert('Twilio Error: ' + data.error);
-                      }
-                    } catch (e: any) {
-                      alert('Network error connecting to backend: ' + e.message);
-                    }
-                  }}
-                  className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition-colors shadow-sm"
-                >
-                  Dispatch
-                </button>
+            {webStatus === 'disconnected' && (
+              <div className="mt-4 bg-orange-50 border border-orange-200 p-4 rounded-2xl flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-sm text-orange-800 mb-1">Your WhatsApp is Disconnected</h3>
+                  <p className="text-xs text-orange-700">The AI cannot reply to messages until you link your device.</p>
+                </div>
+                <button onClick={() => setActiveTab('linking')} className="px-4 py-2 bg-orange-600 text-white text-sm font-bold rounded-lg shadow-sm">Link Device Now</button>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}
 
-      {activeTab === 'integrations' && (
-        <div className="flex-1 overflow-y-auto p-6 md:p-8">
-          <div className="max-w-4xl mx-auto space-y-6">
-            <div className="bg-gradient-to-r from-green-800 to-teal-900 rounded-3xl p-8 shadow-xl text-white relative overflow-hidden flex justify-between items-center">
-              <div className="relative z-10 max-w-2xl">
-                <h2 className="text-3xl font-black mb-3">WhatsApp API Integrations</h2>
-                <p className="text-green-100/90 text-lg font-medium leading-relaxed">
-                  Connect your official WhatsApp Business accounts. Once linked, the AI Engine will automatically handle inbound queries, bookings, and customer support on these numbers.
-                </p>
-              </div>
-              <button onClick={() => setIsConnectModalOpen(true)} className="relative z-10 bg-white text-green-900 font-black px-6 py-3 rounded-xl shadow-lg hover:bg-gray-50 transition-colors flex items-center gap-2">
-                <Plus className="w-5 h-5" /> Connect Account
-              </button>
-            </div>
-
-            <div className="bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white">
-                <h3 className="font-black text-xl text-gray-900">Connected Accounts</h3>
-              </div>
-              
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="bg-gray-50 border-b border-gray-100 text-xs uppercase text-gray-500 font-black tracking-wider">
-                      <th className="p-5 pl-6">Business Name</th>
-                      <th className="p-5">Phone Number</th>
-                      <th className="p-5">Provider</th>
-                      <th className="p-5">Status</th>
-                      <th className="p-5 pr-6 text-right">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="text-sm">
-                    {accounts.map(acc => (
-                      <tr key={acc.id} className="border-b border-gray-50 hover:bg-green-50/30 transition-colors">
-                        <td className="p-5 pl-6 font-bold text-gray-900">{acc.businessName}</td>
-                        <td className="p-5 font-black text-gray-700">{acc.phoneNumber}</td>
-                        <td className="p-5">
-                          <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-lg font-bold text-xs">{acc.provider}</span>
-                        </td>
-                        <td className="p-5">
-                          {acc.status === 'Connected' ? (
-                            <span className="text-emerald-700 font-bold flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500"/> Connected</span>
-                          ) : (
-                            <span className="text-gray-500 font-bold flex items-center gap-1.5"><XCircle className="w-4 h-4"/> Disconnected</span>
-                          )}
-                        </td>
-                        <td className="p-5 pr-6 text-right">
-                          {acc.status === 'Connected' && (
-                            <button onClick={() => handleDisconnect(acc.id)} className="text-xs font-bold text-red-600 hover:underline">Disconnect</button>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                    {accounts.length === 0 && (
-                      <tr><td colSpan={5} className="p-12 text-center text-gray-400 font-medium text-lg">No WhatsApp accounts connected. Click above to integrate.</td></tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Connect Account Modal */}
-      {isConnectModalOpen && (
-        <div className="absolute inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col">
-            <div className="p-5 border-b border-gray-100 flex justify-between items-center bg-white">
-              <h2 className="font-black text-xl text-gray-900 flex items-center gap-2"><Link2 className="w-5 h-5 text-green-600"/> Connect WhatsApp</h2>
-              <button onClick={() => setIsConnectModalOpen(false)} className="text-gray-400 hover:text-gray-700 bg-gray-100 p-1.5 rounded-full"><XCircle className="w-5 h-5" /></button>
-            </div>
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-black text-gray-700 mb-1">Business Name</label>
-                <input type="text" value={connectForm.businessName} onChange={e => setConnectForm({...connectForm, businessName: e.target.value})} className="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white font-medium outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g. Acme Corp" />
-              </div>
-              <div>
-                <label className="block text-sm font-black text-gray-700 mb-1">Phone Number (with Country Code)</label>
-                <input type="text" value={connectForm.phoneNumber} onChange={e => setConnectForm({...connectForm, phoneNumber: e.target.value})} className="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white font-medium outline-none focus:ring-2 focus:ring-green-500" placeholder="+1 234 567 8900" />
-              </div>
-              <div>
-                <label className="block text-sm font-black text-gray-700 mb-1">API Provider</label>
-                <select value={connectForm.provider} onChange={e => setConnectForm({...connectForm, provider: e.target.value})} className="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white font-medium outline-none focus:ring-2 focus:ring-green-500">
-                  <option value="Meta Business Cloud">Meta Business Cloud (Official API)</option>
-                  <option value="Twilio WhatsApp API">Twilio WhatsApp API</option>
-                  <option value="WATI / Interakt">WATI / Interakt</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-black text-gray-700 mb-1">API Access Token / Key</label>
-                <div className="relative">
-                  <Key className="w-5 h-5 absolute left-3 top-3.5 text-gray-400" />
-                  <input type="password" value={connectForm.apiKey} onChange={e => setConnectForm({...connectForm, apiKey: e.target.value})} className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white font-medium outline-none focus:ring-2 focus:ring-green-500" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" />
+      {activeTab === 'linking' && (
+        <div className="flex-1 overflow-y-auto p-6 md:p-8 flex justify-center">
+          <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            {/* Instructions Side */}
+            <div className="space-y-6">
+              <div className="bg-gradient-to-br from-green-800 to-teal-900 rounded-3xl p-8 shadow-xl text-white relative overflow-hidden">
+                <div className="absolute right-0 top-0 opacity-10 transform translate-x-1/4 -translate-y-1/4">
+                  <Smartphone className="w-64 h-64" />
+                </div>
+                <div className="relative z-10">
+                  <h2 className="text-3xl font-black mb-3">Link Your Personal WhatsApp</h2>
+                  <p className="text-green-100/90 text-lg font-medium leading-relaxed mb-6">
+                    Use your phone to scan the QR code. Athena AI will run in the background as a linked device, automatically reading and replying to incoming text queries as you.
+                  </p>
+                  
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4 bg-white/10 p-4 rounded-xl border border-white/20">
+                      <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center font-black">1</div>
+                      <p className="font-medium text-sm">Open WhatsApp on your phone.</p>
+                    </div>
+                    <div className="flex items-center gap-4 bg-white/10 p-4 rounded-xl border border-white/20">
+                      <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center font-black">2</div>
+                      <p className="font-medium text-sm">Tap <strong>Menu</strong> or <strong>Settings</strong> and select <strong>Linked Devices</strong>.</p>
+                    </div>
+                    <div className="flex items-center gap-4 bg-white/10 p-4 rounded-xl border border-white/20">
+                      <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center font-black">3</div>
+                      <p className="font-medium text-sm">Tap <strong>Link a Device</strong> and scan the QR code.</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-              
-              <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 flex gap-3 mt-4">
-                <Shield className="w-5 h-5 text-blue-600 shrink-0" />
-                <p className="text-xs text-blue-800 font-medium">Your API keys are encrypted at rest. Upon connecting, we will instantly provision webhook routes so Athena AI can begin replying to messages.</p>
-              </div>
-
             </div>
-            <div className="p-5 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
-              <button onClick={() => setIsConnectModalOpen(false)} className="px-5 py-2.5 font-bold text-gray-600 hover:bg-gray-200 rounded-xl">Cancel</button>
-              <button onClick={handleConnect} disabled={isConnecting} className="px-5 py-2.5 font-bold text-white bg-green-600 hover:bg-green-700 rounded-xl shadow-sm flex items-center gap-2 disabled:opacity-50">
-                {isConnecting ? <RefreshCw className="w-4 h-4 animate-spin"/> : <CheckCircle2 className="w-4 h-4"/>} 
-                Connect Account
-              </button>
+
+            {/* QR Code Side */}
+            <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-200 flex flex-col items-center justify-center text-center">
+              
+              {webStatus === 'disconnected' && (
+                <div className="space-y-6 flex flex-col items-center">
+                  <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center text-gray-400">
+                    <QrCode className="w-12 h-12" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-black text-gray-900 mb-2">Ready to Connect</h3>
+                    <p className="text-gray-500 font-medium mb-6">Click below to generate your secure linking QR code.</p>
+                    <button 
+                      onClick={startWebConnection}
+                      className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg transition-transform active:scale-95"
+                    >
+                      Generate QR Code
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {webStatus === 'connecting' && (
+                <div className="space-y-6 flex flex-col items-center">
+                  {qrCode ? (
+                    <div className="p-4 bg-white border-2 border-green-500 rounded-2xl shadow-lg animate-fade-in">
+                      <img src={qrCode} alt="WhatsApp QR Code" className="w-64 h-64" />
+                    </div>
+                  ) : (
+                    <div className="w-64 h-64 bg-gray-50 border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center text-gray-400">
+                      <RefreshCw className="w-8 h-8 animate-spin mb-4 text-green-500" />
+                      <p className="font-bold text-sm">Requesting Secure Session...</p>
+                    </div>
+                  )}
+                  <div>
+                    <h3 className="text-xl font-black text-gray-900 mb-2">Scan QR Code</h3>
+                    <p className="text-gray-500 font-medium">Point your phone's camera at the screen above.</p>
+                  </div>
+                </div>
+              )}
+
+              {webStatus === 'connected' && (
+                <div className="space-y-6 flex flex-col items-center">
+                  <div className="w-24 h-24 bg-green-100 border-4 border-green-500 rounded-full flex items-center justify-center text-green-600 shadow-xl">
+                    <CheckCircle2 className="w-12 h-12" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-black text-gray-900 mb-2">Device Linked!</h3>
+                    <p className="text-green-600 font-bold mb-1">Athena AI is active and monitoring.</p>
+                    <p className="text-gray-500 font-medium text-sm mb-6">Connected Number: <strong>+{activeNumber}</strong></p>
+                    
+                    <button 
+                      onClick={logoutWebConnection}
+                      className="px-8 py-3 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-xl shadow-sm transition-colors flex items-center gap-2 mx-auto"
+                    >
+                      <XCircle className="w-5 h-5"/> Logout Device
+                    </button>
+                  </div>
+                </div>
+              )}
+
             </div>
           </div>
         </div>

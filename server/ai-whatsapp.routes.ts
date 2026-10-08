@@ -1,155 +1,151 @@
 import { Router } from 'express';
+import { PrismaClient } from '@prisma/client';
+import makeWASocket, { useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion } from '@whiskeysockets/baileys';
+import QRCode from 'qrcode';
+import pino from 'pino';
 
 const router = Router();
+const prisma = new PrismaClient();
 
-// In-memory database for demo purposes
-// In production, this goes to PostgreSQL/SQLite
-export const interactionLogs: any[] = [
-  {
-    id: 'mock-1',
-    type: 'whatsapp',
-    user: 'John Doe',
-    phone: '+91 98765 43210',
-    intent: 'Order Tracking',
-    status: 'Resolved',
-    timestamp: new Date(Date.now() - 60000).toISOString(),
-    messages: [
-      { sender: 'user', text: 'Where is my order? It was supposed to be delivered yesterday. Order ID #4492.' },
-      { sender: 'ai', text: 'I apologize for the delay, John! I just checked your tracking. The delivery partner attempted delivery yesterday but couldn\'t reach your location. It is out for delivery again today and will reach you by 4:00 PM. Tracking: zho.ink/trck4492' }
-    ]
-  }
+// --------------------------------------------------------
+// IN-MEMORY STATE FOR WHATSAPP WEB CONNECTION
+// --------------------------------------------------------
+let waSocket: any = null;
+let currentQR: string | null = null;
+let connectionStatus: 'disconnected' | 'connecting' | 'connected' = 'disconnected';
+let activeUserNumber: string | null = null;
+
+// Fake interaction logs for the UI dashboard (same as before)
+let interactionLogs = [
+  { customerName: "Sarah Jenkins", channel: "WhatsApp", timestamp: new Date(Date.now() - 120000).toISOString(), inboundMessage: "Hey, do you have any ergonomic chairs in stock?", aiResponse: "Hello Sarah! Yes, we have the 'Ergonomic Office Chair' in stock for $199.50. Would you like me to reserve one for you?" },
+  { customerName: "Michael Chang", channel: "WhatsApp", timestamp: new Date(Date.now() - 360000).toISOString(), inboundMessage: "My order #1024 hasn't arrived yet.", aiResponse: "Hi Michael, let me check that for you. It looks like Order #1024 is out for delivery today and should arrive by 5 PM." }
 ];
 
-// Mock Order Database
-const ordersDB: Record<string, string> = {
-  '4492': 'Out for delivery today by 4:00 PM via Delhivery.',
-  '1234': 'Shipped. Arriving in 2 days via FedEx.',
-  '9999': 'Processing. Will ship tomorrow.'
-};
+async function startWhatsAppWeb() {
+  if (connectionStatus === 'connected' || connectionStatus === 'connecting') return;
+  
+  connectionStatus = 'connecting';
+  currentQR = null;
 
-// --------------------------------------------------------
-// WEBHOOK: INBOUND WHATSAPP MESSAGES
-// --------------------------------------------------------
-router.post('/webhook/whatsapp', async (req, res) => {
   try {
-    const { Body, From, ProfileName } = req.body;
-    
-    if (!Body || !From) {
-      return res.status(400).send('Missing Body or From');
-    }
+    const { state, saveCreds } = await useMultiFileAuthState('whatsapp_auth_info');
+    const { version } = await fetchLatestBaileysVersion();
 
-    const userMessage = Body.toLowerCase();
-    const userName = ProfileName || 'Customer';
-    let aiResponse = '';
-    let intent = 'General Query';
-
-    // Simple AI Intent Routing & Response Generation
-    if (userMessage.includes('order') || userMessage.includes('track')) {
-      intent = 'Order Tracking';
-      // Extract a 4-digit order number if it exists
-      const match = userMessage.match(/\b\d{4}\b/);
-      if (match && ordersDB[match[0]]) {
-        aiResponse = `Hello ${userName}! Checking Order #${match[0]}... Status: ${ordersDB[match[0]]}`;
-      } else if (match) {
-        aiResponse = `Hello ${userName}! I couldn't find order #${match[0]} in our system. Can you double check the number?`;
-      } else {
-        aiResponse = `Hi ${userName}! Please provide your 4-digit order number so I can track it for you.`;
-      }
-    } else if (userMessage.includes('hello') || userMessage.includes('hi')) {
-      aiResponse = `Hello ${userName}! I am Athena, the AI assistant. You can ask me to track your order, check business hours, or ask about our products.`;
-    } else {
-      aiResponse = `Thanks for reaching out! I'm an AI assistant. I didn't quite catch that. Try saying "Track my order #1234".`;
-    }
-
-    // Log the interaction
-    interactionLogs.unshift({
-      id: Date.now().toString(),
-      type: 'whatsapp',
-      user: userName,
-      phone: From,
-      intent,
-      status: 'Resolved',
-      timestamp: new Date().toISOString(),
-      messages: [
-        { sender: 'user', text: Body },
-        { sender: 'ai', text: aiResponse }
-      ]
+    waSocket = makeWASocket({
+      version,
+      logger: pino({ level: 'silent' }) as any,
+      printQRInTerminal: false,
+      auth: state,
+      generateHighQualityLinkPreview: true,
     });
 
-    // Generate TwiML XML Response
-    const twiml = `<?xml version="1.0" encoding="UTF-8"?>
-<Response>
-  <Message>${aiResponse}</Message>
-</Response>`;
+    waSocket.ev.on('creds.update', saveCreds);
 
-    res.set('Content-Type', 'text/xml');
-    res.send(twiml);
+    waSocket.ev.on('connection.update', async (update: any) => {
+      const { connection, lastDisconnect, qr } = update;
 
-  } catch (error) {
-    console.error('WhatsApp Webhook Error:', error);
-    res.status(500).send('Server Error');
+      if (qr) {
+        // Generate QR Data URL to send to frontend
+        currentQR = await QRCode.toDataURL(qr);
+      }
+
+      if (connection === 'close') {
+        const shouldReconnect = (lastDisconnect?.error as any)?.output?.statusCode !== DisconnectReason.loggedOut;
+        console.log('WhatsApp connection closed. Reconnecting:', shouldReconnect);
+        connectionStatus = 'disconnected';
+        currentQR = null;
+        waSocket = null;
+        if (shouldReconnect) {
+          startWhatsAppWeb();
+        }
+      } else if (connection === 'open') {
+        console.log('WhatsApp Web Connected!');
+        connectionStatus = 'connected';
+        currentQR = null;
+        activeUserNumber = waSocket?.user?.id?.split(':')[0] || 'Unknown';
+      }
+    });
+
+    waSocket.ev.on('messages.upsert', async (m: any) => {
+      const msg = m.messages[0];
+      if (!msg.message || msg.key.fromMe) return;
+
+      const senderNumber = msg.key.remoteJid?.split('@')[0];
+      const textMessage = msg.message?.conversation || msg.message?.extendedTextMessage?.text || '';
+
+      if (textMessage) {
+        // Mock AI Response
+        const aiResponse = `(Automated AI Reply) Thanks for reaching out! We received your message: "${textMessage}". Our team will follow up soon!`;
+
+        // Update Dashboard Logs
+        interactionLogs.unshift({
+          customerName: "WhatsApp User (" + senderNumber + ")",
+          channel: "WhatsApp",
+          timestamp: new Date().toISOString(),
+          inboundMessage: textMessage,
+          aiResponse: aiResponse
+        });
+
+        // Send actual reply via WhatsApp Web
+        if (waSocket && connectionStatus === 'connected') {
+          try {
+            await waSocket.sendMessage(msg.key.remoteJid!, { text: aiResponse });
+          } catch (err) {
+            console.error('Error sending reply via Baileys:', err);
+          }
+        }
+      }
+    });
+
+  } catch (err) {
+    console.error("Error starting WhatsApp Web:", err);
+    connectionStatus = 'disconnected';
   }
-});
+}
 
 // --------------------------------------------------------
-// WEBHOOK: INBOUND VOICE CALLS
+// API ENDPOINTS FOR FRONTEND INTEGRATION
 // --------------------------------------------------------
-router.post('/webhook/voice', (req, res) => {
-  const { From } = req.body;
-  
-  // Log the interaction
-  interactionLogs.unshift({
-    id: Date.now().toString(),
-    type: 'voice',
-    user: 'Caller',
-    phone: From || 'Unknown',
-    intent: 'Inbound Call',
-    status: 'In Progress',
-    timestamp: new Date().toISOString(),
-    messages: [
-      { sender: 'user', text: '[Voice Call Initiated]' },
-      { sender: 'ai', text: '[AI Greeting Played]' }
-    ]
+
+router.get('/web-status', async (req, res) => {
+  res.json({
+    success: true,
+    status: connectionStatus,
+    qrCode: currentQR,
+    activeNumber: activeUserNumber
   });
-
-  const twiml = `<?xml version="1.0" encoding="UTF-8"?>
-<Response>
-  <Say voice="Polly.Joanna-Neural">
-    Hello! You have reached the Athena AI Voice Engine. 
-    We are currently processing your request. Please leave a message or text us on WhatsApp for order tracking.
-  </Say>
-  <Record maxLength="20" />
-</Response>`;
-
-  res.set('Content-Type', 'text/xml');
-  res.send(twiml);
 });
 
-// --------------------------------------------------------
-// API: GET LOGS FOR DASHBOARD
-// --------------------------------------------------------
+router.post('/web-connect', async (req, res) => {
+  if (connectionStatus === 'disconnected') {
+    startWhatsAppWeb();
+  }
+  res.json({ success: true, message: "Connection started" });
+});
+
+router.post('/web-disconnect', async (req, res) => {
+  if (waSocket) {
+    waSocket.logout();
+    waSocket = null;
+  }
+  connectionStatus = 'disconnected';
+  currentQR = null;
+  res.json({ success: true, message: "Logged out" });
+});
+
 router.get('/logs', (req, res) => {
   res.json(interactionLogs);
 });
 
-
-// --------------------------------------------------------
-// API: ACCOUNT INTEGRATIONS (WHATSAPP BUSINESS)
-// --------------------------------------------------------
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
-
+// Original Meta/Twilio Accounts DB Routes (kept for backward compatibility)
 router.get('/accounts', async (req, res) => {
   try {
-    const accounts = await prisma.whatsAppAccount.findMany({
-      orderBy: { createdAt: 'desc' }
-    });
+    const accounts = await prisma.whatsAppAccount.findMany({ orderBy: { createdAt: 'desc' } });
     res.json({ success: true, accounts });
   } catch (err: any) {
     res.status(500).json({ success: false, error: err.message });
   }
 });
-
 router.post('/accounts/connect', async (req, res) => {
   const { phoneNumber, businessName, provider, apiKey } = req.body;
   try {
@@ -160,23 +156,13 @@ router.post('/accounts/connect', async (req, res) => {
         data: { businessName, provider, apiKey, status: 'Connected', webhookUrl: 'https://api.athena.com/webhooks/whatsapp' }
       });
     } else {
-      account = await prisma.whatsAppAccount.create({
-        data: {
-          phoneNumber,
-          businessName,
-          provider,
-          apiKey,
-          status: 'Connected',
-          webhookUrl: 'https://api.athena.com/webhooks/whatsapp'
-        }
-      });
+      account = await prisma.whatsAppAccount.create({ data: { phoneNumber, businessName, provider, apiKey, status: 'Connected', webhookUrl: 'https://api.athena.com/webhooks/whatsapp' } });
     }
     res.json({ success: true, account });
   } catch (err: any) {
     res.status(500).json({ success: false, error: err.message });
   }
 });
-
 router.post('/accounts/:id/disconnect', async (req, res) => {
   try {
     const account = await prisma.whatsAppAccount.update({
@@ -188,4 +174,5 @@ router.post('/accounts/:id/disconnect', async (req, res) => {
     res.status(500).json({ success: false, error: err.message });
   }
 });
+
 export default router;
