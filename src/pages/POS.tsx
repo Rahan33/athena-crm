@@ -5,6 +5,10 @@ export default function POS() {
   const [cart, setCart] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   
+  // Filtering & Search
+  const [selectedCategory, setSelectedCategory] = useState("All Products");
+  const [searchQuery, setSearchQuery] = useState("");
+  
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any>(null);
@@ -147,6 +151,14 @@ export default function POS() {
   const tax = subtotal * 0.08;
   const total = subtotal + tax;
 
+  const filteredProducts = products.filter(p => {
+    const matchesCategory = selectedCategory === "All Products" || p.category === selectedCategory;
+    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          (p.sku && p.sku.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                          (p.barcode && p.barcode.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesCategory && matchesSearch;
+  });
+
   return (
     <div className="h-[calc(100vh-4rem)] flex bg-gray-100 overflow-hidden relative">
       <div className="flex-1 flex flex-col p-4">
@@ -155,6 +167,8 @@ export default function POS() {
             <Search className="w-5 h-5 absolute left-3 top-3 text-gray-400" />
             <input 
               type="text" 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Scan barcode or search products..." 
               className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all font-medium"
             />
@@ -169,38 +183,50 @@ export default function POS() {
         </div>
 
         <div className="flex gap-2 mb-4 overflow-x-auto pb-1">
-          {["All Products", "Electronics", "Furniture", "Accessories", "Cables"].map((cat, idx) => (
-            <button key={idx} className={`px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-colors shadow-sm ${idx === 0 ? "bg-slate-900 text-white" : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"}`}>
+          {["All Products", "Electronics", "Furniture", "Accessories", "Cables", "General"].map((cat) => (
+            <button 
+              key={cat} 
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-colors shadow-sm ${selectedCategory === cat ? "bg-slate-900 text-white" : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"}`}
+            >
               {cat}
             </button>
           ))}
         </div>
 
         <div className="flex-1 overflow-y-auto pr-2">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {products.map(product => (
-              <div 
-                key={product.id} 
-                onClick={() => addToCart(product)}
-                className="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all cursor-pointer flex flex-col justify-between group active:scale-95 relative"
-              >
-                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1 z-10">
-                   <button onClick={(e) => openEditModal(e, product)} className="p-1.5 bg-white border border-gray-200 shadow-sm rounded-lg text-blue-600 hover:bg-blue-50"><Edit3 className="w-4 h-4" /></button>
-                   <button onClick={(e) => deleteProduct(e, product.id)} className="p-1.5 bg-white border border-gray-200 shadow-sm rounded-lg text-red-600 hover:bg-red-50"><Trash2 className="w-4 h-4" /></button>
-                </div>
-                <div>
-                  <div className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full inline-block mb-2 bg-blue-100 text-blue-800">
-                    {product.category}
+          {filteredProducts.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full text-gray-400 space-y-4">
+              <Search className="w-16 h-16 opacity-20" />
+              <p className="font-medium text-lg">No products found</p>
+              <button onClick={() => { setSearchQuery(""); setSelectedCategory("All Products"); }} className="text-blue-600 hover:underline">Clear filters</button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {filteredProducts.map(product => (
+                <div 
+                  key={product.id} 
+                  onClick={() => addToCart(product)}
+                  className="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all cursor-pointer flex flex-col justify-between group active:scale-95 relative"
+                >
+                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1 z-10">
+                     <button onClick={(e) => openEditModal(e, product)} className="p-1.5 bg-white border border-gray-200 shadow-sm rounded-lg text-blue-600 hover:bg-blue-50"><Edit3 className="w-4 h-4" /></button>
+                     <button onClick={(e) => deleteProduct(e, product.id)} className="p-1.5 bg-white border border-gray-200 shadow-sm rounded-lg text-red-600 hover:bg-red-50"><Trash2 className="w-4 h-4" /></button>
                   </div>
-                  <h3 className="font-bold text-gray-900 text-sm leading-tight mb-2 group-hover:text-blue-600 transition-colors">{product.name}</h3>
+                  <div>
+                    <div className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full inline-block mb-2 bg-blue-100 text-blue-800">
+                      {product.category}
+                    </div>
+                    <h3 className="font-bold text-gray-900 text-sm leading-tight mb-2 group-hover:text-blue-600 transition-colors">{product.name}</h3>
+                  </div>
+                  <div className="flex items-end justify-between mt-4">
+                    <div className="text-lg font-black text-slate-900">${parseFloat(product.price || 0).toFixed(2)}</div>
+                    <div className="text-xs font-semibold text-gray-500">{product.stock} in stock</div>
+                  </div>
                 </div>
-                <div className="flex items-end justify-between mt-4">
-                  <div className="text-lg font-black text-slate-900">${parseFloat(product.price || 0).toFixed(2)}</div>
-                  <div className="text-xs font-semibold text-gray-500">{product.stock} in stock</div>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -281,6 +307,7 @@ export default function POS() {
                     <option value="Electronics">Electronics</option>
                     <option value="Furniture">Furniture</option>
                     <option value="Accessories">Accessories</option>
+                    <option value="Cables">Cables</option>
                     <option value="General">General</option>
                   </select>
                 </div>
