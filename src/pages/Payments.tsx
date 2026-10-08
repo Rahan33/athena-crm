@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CreditCard, ArrowUpRight, CheckCircle2, TrendingUp, XCircle, RefreshCw, Plus, Copy, Search, ShieldCheck, Link2 } from 'lucide-react';
+import { CreditCard, ArrowUpRight, Settings, CheckCircle2, TrendingUp, XCircle, RefreshCw, Plus, Copy, Search, ShieldCheck, Link2 } from 'lucide-react';
 
 export default function Payments() {
   const [activeTab, setActiveTab] = useState('transactions');
