@@ -4,7 +4,56 @@ import { PrismaClient } from '@prisma/client';
 const router = Router();
 const prisma = new PrismaClient();
 
-// Fetch Web Orders
+// --- Web Product CRUD ---
+
+router.get('/products', async (req, res) => {
+  try {
+    let products = await prisma.webProduct.findMany({ orderBy: { createdAt: 'desc' } });
+    if (products.length === 0) {
+      const seedProducts = [
+        { name: 'Ultra HD Smart TV', price: 899.99, compareAtPrice: 999.99, stock: 15, category: 'Electronics', sku: 'TV-001', status: 'Active' },
+        { name: 'Coffee Maker Pro', price: 149.00, stock: 50, category: 'Home Appliances', sku: 'CM-002', status: 'Active' }
+      ];
+      await prisma.webProduct.createMany({ data: seedProducts });
+      products = await prisma.webProduct.findMany({ orderBy: { createdAt: 'desc' } });
+    }
+    res.json({ success: true, products });
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+router.post('/products', async (req, res) => {
+  try {
+    const product = await prisma.webProduct.create({ data: req.body });
+    res.json({ success: true, product });
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+router.put('/products/:id', async (req, res) => {
+  try {
+    const product = await prisma.webProduct.update({
+      where: { id: req.params.id },
+      data: req.body
+    });
+    res.json({ success: true, product });
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+router.delete('/products/:id', async (req, res) => {
+  try {
+    await prisma.webProduct.delete({ where: { id: req.params.id } });
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// --- Web Orders ---
 router.get('/orders', async (req, res) => {
   try {
     const orders = await prisma.webOrder.findMany({ orderBy: { createdAt: 'desc' } });
