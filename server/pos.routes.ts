@@ -16,6 +16,43 @@ router.get('/products', async (req, res) => {
   }
 });
 
+// Create a new POS Product
+router.post('/products', async (req, res) => {
+  try {
+    const product = await prisma.posProduct.create({
+      data: req.body
+    });
+    res.json({ success: true, product });
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Update an existing POS Product
+router.put('/products/:id', async (req, res) => {
+  try {
+    const product = await prisma.posProduct.update({
+      where: { id: req.params.id },
+      data: req.body
+    });
+    res.json({ success: true, product });
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Delete a POS Product
+router.delete('/products/:id', async (req, res) => {
+  try {
+    await prisma.posProduct.delete({
+      where: { id: req.params.id }
+    });
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // Process a POS Checkout
 router.post('/checkout', async (req, res) => {
   const { items, paymentType, subtotal, tax, total, cashierId } = req.body;
