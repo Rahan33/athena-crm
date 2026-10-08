@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MessageCircle, Phone, Bot, Search, Settings, Activity, Truck, CheckCircle2, User, Link2, XCircle, RefreshCw, Key, Shield } from 'lucide-react';
+import { MessageCircle, Phone, Bot, Search, Settings, Activity, Truck, CheckCircle2, User, Link2, XCircle, RefreshCw, Key, Shield, Plus } from 'lucide-react';
 import axios from 'axios';
 
 export default function AIWhatsApp() {
@@ -120,7 +120,7 @@ export default function AIWhatsApp() {
                       <div>
                         <h3 className="font-bold text-gray-900">{log.customerName}</h3>
                         <p className="text-xs text-gray-500 font-medium flex items-center gap-1">
-                          <MessageCircle className="w-3 h-3 text-green-500" /> {log.channel} • {new Date(log.timestamp).toLocaleTimeString()}
+                          <MessageCircle className="w-3 h-3 text-green-500" /> {log.channel} â€¢ {new Date(log.timestamp).toLocaleTimeString()}
                         </p>
                       </div>
                     </div>
@@ -130,14 +130,14 @@ export default function AIWhatsApp() {
                   </div>
                   <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 space-y-3">
                     <div className="flex gap-3">
-                      <div className="text-2xl">👤</div>
+                      <div className="text-2xl">ðŸ‘¤</div>
                       <div>
                         <div className="text-xs font-bold text-gray-500 mb-1">Customer</div>
                         <div className="text-sm text-gray-800 font-medium">{log.inboundMessage}</div>
                       </div>
                     </div>
                     <div className="flex gap-3">
-                      <div className="text-2xl">🤖</div>
+                      <div className="text-2xl">ðŸ¤–</div>
                       <div>
                         <div className="text-xs font-bold text-green-600 mb-1 flex items-center gap-1"><Bot className="w-3 h-3"/> Athena AI Reply</div>
                         <div className="text-sm text-gray-800 font-medium bg-white p-3 rounded-xl border border-green-100 shadow-sm">
@@ -293,7 +293,7 @@ export default function AIWhatsApp() {
                 <label className="block text-sm font-black text-gray-700 mb-1">API Access Token / Key</label>
                 <div className="relative">
                   <Key className="w-5 h-5 absolute left-3 top-3.5 text-gray-400" />
-                  <input type="password" value={connectForm.apiKey} onChange={e => setConnectForm({...connectForm, apiKey: e.target.value})} className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white font-medium outline-none focus:ring-2 focus:ring-green-500" placeholder="••••••••••••••••••••••••" />
+                  <input type="password" value={connectForm.apiKey} onChange={e => setConnectForm({...connectForm, apiKey: e.target.value})} className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white font-medium outline-none focus:ring-2 focus:ring-green-500" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" />
                 </div>
               </div>
               
