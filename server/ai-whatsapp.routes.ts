@@ -132,4 +132,60 @@ router.get('/logs', (req, res) => {
   res.json(interactionLogs);
 });
 
+
+// --------------------------------------------------------
+// API: ACCOUNT INTEGRATIONS (WHATSAPP BUSINESS)
+// --------------------------------------------------------
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
+
+router.get('/accounts', async (req, res) => {
+  try {
+    const accounts = await prisma.whatsAppAccount.findMany({
+      orderBy: { createdAt: 'desc' }
+    });
+    res.json({ success: true, accounts });
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+router.post('/accounts/connect', async (req, res) => {
+  const { phoneNumber, businessName, provider, apiKey } = req.body;
+  try {
+    let account = await prisma.whatsAppAccount.findUnique({ where: { phoneNumber } });
+    if (account) {
+      account = await prisma.whatsAppAccount.update({
+        where: { phoneNumber },
+        data: { businessName, provider, apiKey, status: 'Connected', webhookUrl: 'https://api.athena.com/webhooks/whatsapp' }
+      });
+    } else {
+      account = await prisma.whatsAppAccount.create({
+        data: {
+          phoneNumber,
+          businessName,
+          provider,
+          apiKey,
+          status: 'Connected',
+          webhookUrl: 'https://api.athena.com/webhooks/whatsapp'
+        }
+      });
+    }
+    res.json({ success: true, account });
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+router.post('/accounts/:id/disconnect', async (req, res) => {
+  try {
+    const account = await prisma.whatsAppAccount.update({
+      where: { id: req.params.id },
+      data: { status: 'Disconnected', apiKey: null }
+    });
+    res.json({ success: true, account });
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 export default router;

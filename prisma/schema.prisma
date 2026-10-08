@@ -549,3 +549,16 @@ model PaymentLink {
   status      String   @default("Active") // Active, Paid, Expired
   createdAt   DateTime @default(now())
 }
+
+// --- COMMUNICATIONS & WHATSAPP ---
+model WhatsAppAccount {
+  id           String   @id @default(uuid())
+  phoneNumber  String   @unique
+  businessName String
+  provider     String   @default("Meta Business Cloud") // Meta, Twilio
+  status       String   @default("Disconnected") // Connected, Disconnected, Pending
+  apiKey       String?
+  webhookUrl   String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

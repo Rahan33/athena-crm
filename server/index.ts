@@ -18,6 +18,7 @@ import posRoutes from './pos.routes';
 import ecommerceRoutes from './ecommerce.routes';
 import ondcRoutes from './ondc.routes';
 import paymentsRoutes from './payments.routes';
+import aiWhatsappRoutes from './ai-whatsapp.routes';
 
 import multer from 'multer';
 import path from 'path';
@@ -202,6 +203,7 @@ app.use('/api/pos', posRoutes);
 app.use('/api/ecommerce', ecommerceRoutes);
 app.use('/api/ondc', ondcRoutes);
 app.use('/api/payments', paymentsRoutes);
+app.use('/api/ai-whatsapp', aiWhatsappRoutes);
 
 import fs from 'fs';
 
