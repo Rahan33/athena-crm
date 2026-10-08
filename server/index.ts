@@ -17,6 +17,7 @@ import authRoutes from './auth.routes';
 import posRoutes from './pos.routes';
 import ecommerceRoutes from './ecommerce.routes';
 import ondcRoutes from './ondc.routes';
+import paymentsRoutes from './payments.routes';
 
 import multer from 'multer';
 import path from 'path';
@@ -200,6 +201,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/pos', posRoutes);
 app.use('/api/ecommerce', ecommerceRoutes);
 app.use('/api/ondc', ondcRoutes);
+app.use('/api/payments', paymentsRoutes);
 
 import fs from 'fs';
 
