@@ -7,15 +7,21 @@ const prisma = new PrismaClient();
 // Fetch all available products for POS
 router.get('/products', async (req, res) => {
   try {
-    const products = await prisma.posProduct.findMany({
-      where: { stock: { gt: 0 } }
-    });
+    let products = await prisma.posProduct.findMany();
+    if (products.length === 0) {
+      // Seed initial products
+      const seedProducts = [
+        { name: 'Wireless Noise-Cancelling Headphones', price: 299.99, stock: 45, category: 'Electronics', sku: 'HW-101', barcode: '101' },
+        { name: 'Ergonomic Office Chair', price: 199.50, stock: 12, category: 'Furniture', sku: 'FC-202', barcode: '202' }
+      ];
+      await prisma.posProduct.createMany({ data: seedProducts });
+      products = await prisma.posProduct.findMany();
+    }
     res.json({ success: true, products });
   } catch (err: any) {
     res.status(500).json({ success: false, error: err.message });
   }
 });
-
 // Create a new POS Product
 router.post('/products', async (req, res) => {
   try {

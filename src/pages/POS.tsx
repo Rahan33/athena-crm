@@ -20,14 +20,8 @@ export default function POS() {
     try {
       const res = await fetch("/api/pos/products");
       const data = await res.json();
-      if (data.success && data.products.length > 0) {
+      if (data.success) {
         setProducts(data.products);
-      } else {
-        // Fallback for visual purposes if DB is empty
-        setProducts([
-          { id: "1", name: "Wireless Noise-Cancelling Headphones", price: 299.99, stock: 45, category: "Electronics" },
-          { id: "2", name: "Ergonomic Office Chair", price: 199.50, stock: 12, category: "Furniture" },
-        ]);
       }
     } catch (e) {
       console.error(e);
