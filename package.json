@@ -7,7 +7,7 @@
     "dev": "concurrently -k -n \"CLIENT,SERVER\" -c \"cyan,magenta\" \"vite --host\" \"tsx watch server/index.ts\"",
     "dev:client": "vite --host",
     "dev:server": "tsx watch server/index.ts",
-    "build": "tsc -b && vite build",
+    "build": "npx prisma generate && tsc -b && vite build",
     "start": "tsx server/index.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy",

@@ -198,7 +198,6 @@ app.use('/api/telephony', telephonyRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/pos', posRoutes);
 app.use('/api/ecommerce', ecommerceRoutes);
-app.use('/api/ai-whatsapp', aiWhatsappRoutes);
 
 import fs from 'fs';
 
