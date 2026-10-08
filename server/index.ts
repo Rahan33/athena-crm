@@ -16,6 +16,7 @@ import telephonyRoutes from './telephony.routes';
 import authRoutes from './auth.routes';
 import posRoutes from './pos.routes';
 import ecommerceRoutes from './ecommerce.routes';
+import ondcRoutes from './ondc.routes';
 
 import multer from 'multer';
 import path from 'path';
@@ -198,6 +199,7 @@ app.use('/api/telephony', telephonyRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/pos', posRoutes);
 app.use('/api/ecommerce', ecommerceRoutes);
+app.use('/api/ondc', ondcRoutes);
 
 import fs from 'fs';
 

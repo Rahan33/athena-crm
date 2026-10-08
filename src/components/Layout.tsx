@@ -194,6 +194,7 @@ export default function Layout() {
   ];
 
   const deepFeatures = [
+    { name: 'ONDC Integrations', href: '/ondc', icon: Globe, category: 'Retail Tools' },
     { name: 'Upload Product Online', href: '/ecommerce', icon: ShoppingBag, category: 'Retail Tools' },
     { name: 'Web Orders & Shipping', href: '/ecommerce', icon: Truck, category: 'Retail Tools' },
     { name: 'Omnichannel Storefront', href: '/ecommerce', icon: Globe, category: 'Retail Tools' },

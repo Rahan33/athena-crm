@@ -477,6 +477,7 @@ model OnlineStoreSettings {
 }
 
 model WebProduct {
+  ondcListing  OndcListing?
   id          String     @id @default(uuid())
   posProductId String    @unique
   posProduct  PosProduct @relation(fields: [posProductId], references: [id])
@@ -501,4 +502,27 @@ model WebOrder {
   trackingNumber  String?
   items           String   // JSON of items ordered
   createdAt       DateTime @default(now())
+}
+// --- ONDC Integration Models ---
+model OndcListing {
+  id              String     @id @default(uuid())
+  webProductId    String     @unique
+  webProduct      WebProduct @relation(fields: [webProductId], references: [id])
+  isPublished     Boolean    @default(false)
+  networkPrice    Float
+  networkFee      Float      @default(3.0) // 3% ONDC network fee
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+model OndcOrder {
+  id              String   @id @default(uuid())
+  networkOrderId  String   @unique
+  buyerApp        String   // e.g., "Paytm", "Pincode"
+  customerName    String
+  totalAmount     Float
+  status          String   @default("Pending")
+  items           String   // JSON string of items bought
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
